@@ -9,7 +9,7 @@ using UnityEngine.XR;
 
 namespace FPS_Counter.Behaviours
 {
-	internal class FPSCounter : MonoBehaviour
+	internal class FpsCounter : MonoBehaviour
 	{
 		// Allocate beforehand, because invoking a color "constant" will create a new struct every time
 		private static readonly Color Green = Color.green;

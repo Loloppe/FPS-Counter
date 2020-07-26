@@ -18,12 +18,12 @@ namespace FPS_Counter
 	[Plugin(RuntimeOptions.SingleStartInit)]
 	public class Plugin
 	{
-		private static PluginMetadata _metadata;
+		private static PluginMetadata? _metadata;
 		private static string? _name;
 
 		private SettingsController? _settingsHost;
 
-		public static string PluginName => _name ??= _metadata?.Name ?? Assembly.GetExecutingAssembly().GetName().Name;
+		internal static string PluginName => _name ??= _metadata?.Name ?? Assembly.GetExecutingAssembly().GetName().Name;
 
 
 		[Init]
@@ -77,7 +77,7 @@ namespace FPS_Counter
 
 		private static void OnGameSceneLoaded()
 		{
-			new GameObject(PluginName).AddComponent<Behaviours.FPSCounter>();
+			new GameObject(PluginName).AddComponent<Behaviours.FpsCounter>();
 		}
 
 		private static void AddCustomCounter()
