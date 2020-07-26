@@ -4,7 +4,7 @@
   </horizontal>
 
   <increment-setting text='FPS Update rate' value='update-rate'
-                     increment='0.1' />
+                     min='0.1' increment='0.1' />
   <bool-setting text='Use FPS Colors' value='use-colors' />
   <bool-setting text='Show FPS ring' value='show-ring' />
 </settings-container>
