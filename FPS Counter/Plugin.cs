@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using BeatSaberMarkupLanguage.Settings;
 using CountersPlus.Custom;
 using FPS_Counter.Settings;
@@ -10,7 +9,6 @@ using IPA.Config;
 using IPA.Config.Stores;
 using IPA.Loader;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
 
 namespace FPS_Counter
@@ -20,7 +18,6 @@ namespace FPS_Counter
 	{
 		private static PluginMetadata _metadata;
 		private static string? _name;
-		private static Version? _version;
 
 		internal static bool IsCountersPlusPresent { get; set; }
 		public static string PluginName => _name ??= _metadata?.Name ?? Assembly.GetExecutingAssembly().GetName().Name;
