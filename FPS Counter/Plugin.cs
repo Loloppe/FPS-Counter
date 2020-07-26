@@ -18,6 +18,8 @@ namespace FPS_Counter
 	{
 		private static PluginMetadata _metadata;
 		private static string? _name;
+		
+		private SettingsController? _settingsHost;
 
 		internal static bool IsCountersPlusPresent { get; set; }
 		public static string PluginName => _name ??= _metadata?.Name ?? Assembly.GetExecutingAssembly().GetName().Name;
@@ -64,7 +66,7 @@ namespace FPS_Counter
 
 		private void BSEventsOnlateMenuSceneLoadedFresh(ScenesTransitionSetupDataSO obj)
 		{
-			BSMLSettings.instance.AddSettingsMenu(PluginName, "FPS_Counter.Settings.UI.Views.mainsettings.bsml", MainSettings.instance);
+			BSMLSettings.instance.AddSettingsMenu(PluginName, "FPS_Counter.Settings.UI.Views.mainsettings.bsml", _settingsHost ??= new SettingsController());
 		}
 
 		private void AddCustomCounter()
