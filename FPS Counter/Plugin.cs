@@ -30,7 +30,7 @@ namespace FPS_Counter
 		public void Init(IPALogger logger, PluginMetadata metaData, Config config)
 		{
 			_metadata = metaData;
-			Logger.log = logger;
+			Logger.Log = logger;
 
 			Configuration.Instance = config.Generated<Configuration>();
 		}
@@ -38,7 +38,7 @@ namespace FPS_Counter
 		[OnStart]
 		public void OnStart()
 		{
-			Logger.log.Info("Checking for Counters+");
+			Logger.Log.Info("Checking for Counters+");
 			if (Utils.IsPluginEnabled("Counters+"))
 			{
 				IsCountersPlusPresent = true;
@@ -46,7 +46,7 @@ namespace FPS_Counter
 			}
 			else
 			{
-				Logger.log.Warn("Counters+ not installed");
+				Logger.Log.Warn("Counters+ not installed");
 			}
 
 			BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh += BSEventsOnlateMenuSceneLoadedFresh;
@@ -72,7 +72,7 @@ namespace FPS_Counter
 
 		private void AddCustomCounter()
 		{
-			Logger.log.Info("Creating Custom Counter");
+			Logger.Log.Info("Creating Custom Counter");
 
 			CustomCounter counter = new CustomCounter
 			{

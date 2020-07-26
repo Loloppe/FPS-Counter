@@ -25,13 +25,13 @@ namespace FPS_Counter.Behaviours
         {
             try
             {
-                Logger.log.Debug("Attempting to Initialize FPS Counter");
+                Logger.Log.Debug("Attempting to Initialize FPS Counter");
                 Init();
             }
             catch (Exception ex)
             {
-                Logger.log.Error("FPS Counter Done screwed up on initialization"); // -Kyle1413
-                Logger.log.Error(ex);
+                Logger.Log.Error("FPS Counter Done screwed up on initialization"); // -Kyle1413
+                Logger.Log.Error(ex);
             }
         }
 
@@ -39,7 +39,7 @@ namespace FPS_Counter.Behaviours
         {
             targetFramerate = (int)XRDevice.refreshRate;
 
-            Logger.log.Info($"Target framerate = {targetFramerate}");
+            Logger.Log.Info($"Target framerate = {targetFramerate}");
 
             Canvas canvas = gameObject.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.WorldSpace;
@@ -61,8 +61,8 @@ namespace FPS_Counter.Behaviours
             }
             catch (Exception ex)
             {
-                Logger.log.Error("oops");
-                Logger.log.Error(ex);
+                Logger.Log.Error("oops");
+                Logger.Log.Error(ex);
             }
 
             TextHelper.CreateText(out counter, canvas, Vector2.zero);

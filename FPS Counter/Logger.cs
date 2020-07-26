@@ -2,8 +2,8 @@
 
 namespace FPS_Counter
 {
-    internal static class Logger
-    {
-        public static IPALogger log { get; set; }
-    }
+	internal static class Logger
+	{
+		public static IPALogger Log { get; set; } = null!;
+	}
 }
