@@ -9,17 +9,23 @@ using UnityEngine.XR;
 
 namespace FPS_Counter.Behaviours
 {
-	internal class FpsCounter : MonoBehaviour
+	internal class FPSCounter : MonoBehaviour
 	{
-		private TMP_Text _counter;
-		private GameObject _percent;
-		private int _targetFramerate;
-		private Image _image;
+		// Allocate beforehand, because invoking a color "constant" will create a new struct every time
+		private static readonly Color Green = Color.green;
+		private static readonly Color Yellow = Color.yellow;
+		private static readonly Color Orange = new Color(1, 0.64f, 0);
+		private static readonly Color Red = Color.red;
 
-		private float _numFrames;
-		private float _lastFrameTime;
-		private float _nextCounterUpdate = Time.time + Configuration.Instance.UpdateRate;
+		private int _targetFramerate;
+		private TMP_Text? _counter;
+		private GameObject? _percent;
 		private float _ringFillPercent = 1;
+		private Image? _image;
+
+		private float _timeLeft;
+		private int _frameCount;
+		private float _accumulatedTime;
 
 		private void Awake()
 		{
@@ -99,62 +105,60 @@ namespace FPS_Counter.Behaviours
 
 		private void Update()
 		{
-			if (Time.time > _nextCounterUpdate)
+			var localDeltaTime = Time.deltaTime;
+			_accumulatedTime += Time.timeScale / localDeltaTime;
+			_timeLeft -= localDeltaTime;
+			++_frameCount;
+
+			if (Configuration.Instance.ShowRing && _image)
 			{
-				float fps = Mathf.Round(_numFrames / (Time.time - _lastFrameTime));
-				_counter.text = $"FPS\n{fps}";
-				_ringFillPercent = fps / _targetFramerate;
-
-				if (Configuration.Instance.UseColors)
-				{
-					Color color;
-
-					if (_ringFillPercent > 0.95f)
-					{
-						color = Color.green;
-					}
-					else if (_ringFillPercent > 0.7f)
-					{
-						color = Color.yellow;
-					}
-					else if (_ringFillPercent > 0.5f)
-					{
-						color = new Color(1, 0.64f, 0);
-					}
-					else
-					{
-						color = Color.red;
-					}
-
-					_image?.SetColor(color);
-					_counter.color = color;
-				}
-
-				_lastFrameTime = _nextCounterUpdate;
-				_nextCounterUpdate += Configuration.Instance.UpdateRate;
-				_numFrames = 0;
+				// Animate the ring Fps indicator to it's final value with every update invocation 
+				_image!.fillAmount = Mathf.Lerp(_image.fillAmount, _ringFillPercent, 2 * localDeltaTime);
 			}
 
-			if (Configuration.Instance.ShowRing)
+			if (_timeLeft > 0.0)
 			{
+				// The time to update hasn't come yet.
+				return;
+			}
+
+			var fps = Mathf.Round(_accumulatedTime / _frameCount);
+			_counter!.text = $"FPS\n{fps}";
+			_ringFillPercent = fps / _targetFramerate;
+
+			if (Configuration.Instance.UseColors)
+			{
+				var color = DetermineColor(_ringFillPercent);
+				_counter.color = color;
 				if (_image)
 				{
-					_image.fillAmount = Mathf.Lerp(_image.fillAmount, _ringFillPercent, 2 * Time.deltaTime);
+					_image!.color = color;
 				}
 			}
 
-			_numFrames++;
+			_timeLeft = Configuration.Instance.UpdateRate;
+			_accumulatedTime = 0.0f;
+			_frameCount = 0;
 		}
-	}
 
-	internal static class ExtensionMethods
-	{
-		public static void SetColor(this Image image, Color color)
+		private static Color DetermineColor(float fpsTargetPercentage)
 		{
-			if (image)
+			if (fpsTargetPercentage > 0.95f)
 			{
-				image.color = color;
+				return Green;
 			}
+
+			if (fpsTargetPercentage > 0.7f)
+			{
+				return Yellow;
+			}
+
+			if (fpsTargetPercentage > 0.5f)
+			{
+				return Orange;
+			}
+
+			return Red;
 		}
 	}
 }
