@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using BeatSaberMarkupLanguage.Settings;
 using CountersPlus.Custom;
 using FPS_Counter.Settings;
@@ -18,7 +20,7 @@ namespace FPS_Counter
 	{
 		private static PluginMetadata _metadata;
 		private static string? _name;
-		
+
 		private SettingsController? _settingsHost;
 
 		public static string PluginName => _name ??= _metadata?.Name ?? Assembly.GetExecutingAssembly().GetName().Name;
@@ -37,12 +39,12 @@ namespace FPS_Counter
 		public void OnStart()
 		{
 			Logger.Log.Info("Checking for Counters+");
-			
+
 			PluginUtils.CountersPlusStateChanged += OnCountersPlusStateChanged;
 			PluginUtils.Setup();
 
 			BS_Utils.Utilities.BSEvents.gameSceneLoaded += OnGameSceneLoaded;
-			
+
 			BSMLSettings.instance.AddSettingsMenu(PluginName, "FPS_Counter.Settings.UI.Views.mainsettings.bsml", _settingsHost ??= new SettingsController());
 		}
 
@@ -54,10 +56,12 @@ namespace FPS_Counter
 
 			BS_Utils.Utilities.BSEvents.gameSceneLoaded -= OnGameSceneLoaded;
 
+			RemoveCustomCounter();
+
 			BSMLSettings.instance.RemoveSettingsMenu(_settingsHost);
 			_settingsHost = null;
 		}
-		
+
 		private static void OnCountersPlusStateChanged(object _, bool enabled)
 		{
 			Logger.Log.Info($"Counters+ state changed. Enabled: {enabled}");
@@ -65,11 +69,15 @@ namespace FPS_Counter
 			{
 				AddCustomCounter();
 			}
+			else
+			{
+				RemoveCustomCounter();
+			}
 		}
 
 		private static void OnGameSceneLoaded()
 		{
-			new GameObject("FPS Counter").AddComponent<Behaviours.FPSCounter>();
+			new GameObject(PluginName).AddComponent<Behaviours.FPSCounter>();
 		}
 
 		private static void AddCustomCounter()
@@ -86,6 +94,22 @@ namespace FPS_Counter
 			};
 
 			CustomCounterCreator.Create(counter);
+		}
+
+		private static void RemoveCustomCounter()
+		{
+			Logger.Log.Info("Removing Custom Counter");
+
+			try
+			{
+				var loadedCustomCounters = typeof(CustomCounterCreator).GetField("LoadedCustomCounters", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null) as List<CustomCounter>;
+				loadedCustomCounters?.RemoveAll(cc => cc.Name == PluginName);
+			}
+			catch (Exception ex)
+			{
+				Logger.Log.Error("FPS Counter screwed up on removing integration from Counters+");
+				Logger.Log.Error(ex);
+			}
 		}
 	}
 }
