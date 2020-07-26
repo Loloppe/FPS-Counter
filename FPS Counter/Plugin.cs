@@ -15,7 +15,7 @@ using IPALogger = IPA.Logging.Logger;
 
 namespace FPS_Counter
 {
-	[Plugin(RuntimeOptions.SingleStartInit)]
+	[Plugin(RuntimeOptions.DynamicInit)]
 	public class Plugin
 	{
 		private static PluginMetadata? _metadata;
@@ -35,8 +35,8 @@ namespace FPS_Counter
 			Configuration.Instance = config.Generated<Configuration>();
 		}
 
-		[OnStart]
-		public void OnStart()
+		[OnEnable]
+		public void OnEnable()
 		{
 			Logger.Log.Info("Checking for Counters+");
 
@@ -48,8 +48,8 @@ namespace FPS_Counter
 			BSMLSettings.instance.AddSettingsMenu(PluginName, "FPS_Counter.Settings.UI.Views.mainsettings.bsml", _settingsHost ??= new SettingsController());
 		}
 
-		[OnExit]
-		public void OnExit()
+		[OnDisable]
+		public void OnDisable()
 		{
 			PluginUtils.CountersPlusStateChanged -= OnCountersPlusStateChanged;
 			PluginUtils.Cleanup();
