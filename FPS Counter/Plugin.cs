@@ -21,7 +21,6 @@ namespace FPS_Counter
 		
 		private SettingsController? _settingsHost;
 
-		internal static bool IsCountersPlusPresent { get; set; }
 		public static string PluginName => _name ??= _metadata?.Name ?? Assembly.GetExecutingAssembly().GetName().Name;
 
 
@@ -38,38 +37,42 @@ namespace FPS_Counter
 		public void OnStart()
 		{
 			Logger.Log.Info("Checking for Counters+");
-			if (Utils.IsPluginEnabled("Counters+"))
-			{
-				IsCountersPlusPresent = true;
-				AddCustomCounter();
-			}
-			else
-			{
-				Logger.Log.Warn("Counters+ not installed");
-			}
+			
+			PluginUtils.CountersPlusStateChanged += OnCountersPlusStateChanged;
+			PluginUtils.Setup();
 
-			BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh += BSEventsOnlateMenuSceneLoadedFresh;
-			BS_Utils.Utilities.BSEvents.gameSceneLoaded += BSEventsOngameSceneLoaded;
+			BS_Utils.Utilities.BSEvents.gameSceneLoaded += OnGameSceneLoaded;
+			
+			BSMLSettings.instance.AddSettingsMenu(PluginName, "FPS_Counter.Settings.UI.Views.mainsettings.bsml", _settingsHost ??= new SettingsController());
 		}
 
 		[OnExit]
 		public void OnExit()
 		{
-			BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh -= BSEventsOnlateMenuSceneLoadedFresh;
-			BS_Utils.Utilities.BSEvents.gameSceneLoaded -= BSEventsOngameSceneLoaded;
+			PluginUtils.CountersPlusStateChanged -= OnCountersPlusStateChanged;
+			PluginUtils.Cleanup();
+
+			BS_Utils.Utilities.BSEvents.gameSceneLoaded -= OnGameSceneLoaded;
+
+			BSMLSettings.instance.RemoveSettingsMenu(_settingsHost);
+			_settingsHost = null;
+		}
+		
+		private static void OnCountersPlusStateChanged(object _, bool enabled)
+		{
+			Logger.Log.Info($"Counters+ state changed. Enabled: {enabled}");
+			if (enabled)
+			{
+				AddCustomCounter();
+			}
 		}
 
-		private void BSEventsOngameSceneLoaded()
+		private static void OnGameSceneLoaded()
 		{
 			new GameObject("FPS Counter").AddComponent<Behaviours.FPSCounter>();
 		}
 
-		private void BSEventsOnlateMenuSceneLoadedFresh(ScenesTransitionSetupDataSO obj)
-		{
-			BSMLSettings.instance.AddSettingsMenu(PluginName, "FPS_Counter.Settings.UI.Views.mainsettings.bsml", _settingsHost ??= new SettingsController());
-		}
-
-		private void AddCustomCounter()
+		private static void AddCustomCounter()
 		{
 			Logger.Log.Info("Creating Custom Counter");
 
