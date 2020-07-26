@@ -26,7 +26,7 @@ This file should not be uploaded to GitHub and is in the .gitignore.
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <!-- Set "YOUR OWN" Beat Saber folder here to resolve most of the dependency paths! -->
-    <BeatSaberDir>E:\Program Files (x86)\Steam\steamapps\common\Beat Saber</BeatSaberDir>
+    <BeatSaberDir>D:\Program Files (x86)\Steam\steamapps\common\Beat Saber</BeatSaberDir>
   </PropertyGroup>
 </Project>
 ```
