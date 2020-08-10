@@ -18,6 +18,8 @@ namespace FPS_Counter.Behaviours
 		private static readonly Color Orange = new Color(1, 0.64f, 0);
 		private static readonly Color Red = Color.red;
 
+		private PluginUtils? _pluginUtils;
+
 		private int _targetFramerate;
 		private TMP_Text? _counter;
 		private GameObject? _percent;
@@ -27,6 +29,12 @@ namespace FPS_Counter.Behaviours
 		private float _timeLeft;
 		private int _frameCount;
 		private float _accumulatedTime;
+
+		[Inject]
+		protected void Construct(PluginUtils pluginUtils)
+		{
+			_pluginUtils = pluginUtils;
+		}
 
 		private void Start()
 		{
@@ -50,14 +58,14 @@ namespace FPS_Counter.Behaviours
 
 				TextHelper.CreateText(out _counter, canvas, Vector2.zero);
 				_counter.alignment = TextAlignmentOptions.Center;
-				_counter.transform.localScale *= PluginUtils.IsCountersPlusPresent ? 1 : 0.12f;
+				_counter.transform.localScale *= _pluginUtils?.IsCountersPlusPresent ?? false ? 1 : 0.12f;
 				_counter.fontSize = 2.5f;
 				_counter.color = Color.white;
 				_counter.lineSpacing = -50f;
 				_counter.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1f);
 				_counter.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1f);
 				_counter.enableWordWrapping = false;
-				_counter.transform.localPosition = PluginUtils.IsCountersPlusPresent ? Vector3.zero : new Vector3(-0.1f, 3.5f, 8f);
+				_counter.transform.localPosition = _pluginUtils?.IsCountersPlusPresent ?? false ? Vector3.zero : new Vector3(-0.1f, 3.5f, 8f);
 
 				if (!Configuration.Instance.ShowRing)
 				{

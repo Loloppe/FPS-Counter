@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using BeatSaberMarkupLanguage.Settings;
-using CountersPlus.Custom;
 using FPS_Counter.Installers;
 using FPS_Counter.Settings;
 using FPS_Counter.Settings.UI;
@@ -19,18 +15,17 @@ namespace FPS_Counter
 	[Plugin(RuntimeOptions.DynamicInit)]
 	public class Plugin
 	{
-		private static PluginMetadata? _metadata;
 		private static string? _name;
 
 		private SettingsController? _settingsHost;
 
-		internal static string PluginName => _name ??= _metadata?.Name ?? Assembly.GetExecutingAssembly().GetName().Name;
-
+		internal static string PluginName => _name ??= Metadata?.Name ?? Assembly.GetExecutingAssembly().GetName().Name;
+		internal static PluginMetadata? Metadata;
 
 		[Init]
 		public void Init(IPALogger logger, PluginMetadata metaData, Config config)
 		{
-			_metadata = metaData;
+			Metadata = metaData;
 			Logger.Log = logger;
 
 			Configuration.Instance = config.Generated<Configuration>();
@@ -41,71 +36,22 @@ namespace FPS_Counter
 		{
 			Logger.Log.Info("Checking for Counters+");
 
-			PluginUtils.CountersPlusStateChanged += OnCountersPlusStateChanged;
-			PluginUtils.Setup();
-
 			BSMLSettings.instance.AddSettingsMenu(PluginName, "FPS_Counter.Settings.UI.Views.mainsettings.bsml", _settingsHost ??= new SettingsController());
 
+			SiraUtil.Zenject.Installer.RegisterAppInstaller<AppInstaller>();
 			SiraUtil.Zenject.Installer.RegisterGameplayCoreInstaller<GamePlayCoreInstaller>();
 		}
 
 		[OnDisable]
 		public void OnDisable()
 		{
+			CountersPlusUtils.RemoveCustomCounter();
+			
 			SiraUtil.Zenject.Installer.UnregisterGameplayCoreInstaller<GamePlayCoreInstaller>();
-
-			PluginUtils.CountersPlusStateChanged -= OnCountersPlusStateChanged;
-			PluginUtils.Cleanup();
-
-			RemoveCustomCounter();
+			SiraUtil.Zenject.Installer.UnregisterAppInstaller<AppInstaller>();
 
 			BSMLSettings.instance.RemoveSettingsMenu(_settingsHost);
 			_settingsHost = null;
-		}
-
-		private static void OnCountersPlusStateChanged(object _, bool enabled)
-		{
-			Logger.Log.Info($"Counters+ state changed. Enabled: {enabled}");
-			if (enabled)
-			{
-				AddCustomCounter();
-			}
-			else
-			{
-				RemoveCustomCounter();
-			}
-		}
-
-		private static void AddCustomCounter()
-		{
-			Logger.Log.Info("Creating Custom Counter");
-
-			CustomCounter counter = new CustomCounter
-			{
-				SectionName = Constants.CountersPlusSectionName,
-				Name = PluginName,
-				BSIPAMod = _metadata,
-				Counter = PluginName,
-				Icon_ResourceName = "FPS_Counter.Resources.icon.png"
-			};
-
-			CustomCounterCreator.Create(counter);
-		}
-
-		private static void RemoveCustomCounter()
-		{
-			Logger.Log.Info("Removing Custom Counter");
-
-			try
-			{
-				var loadedCustomCounters = typeof(CustomCounterCreator).GetField("LoadedCustomCounters", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null) as List<CustomCounter>;
-				loadedCustomCounters?.RemoveAll(cc => cc.Name == PluginName);
-			}
-			catch (Exception ex)
-			{
-				Logger.Log.Error("FPS Counter screwed up on removing integration from Counters+");
-				Logger.Log.Error(ex);
-			}
 		}
 	}
 }

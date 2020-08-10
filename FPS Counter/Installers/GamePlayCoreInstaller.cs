@@ -9,7 +9,12 @@ namespace FPS_Counter.Installers
 	{
 		public override void InstallBindings()
 		{
-			if (!Container.Resolve<GameplayCoreSceneSetupData>().playerSpecificSettings.noTextsAndHuds && PluginUtils.IsFpsCounterEnabledInCountersPlus)
+			if (!AppInstaller.FirstBindingInstalled)
+			{
+				return;
+			}
+			
+			if (!Container.Resolve<GameplayCoreSceneSetupData>().playerSpecificSettings.noTextsAndHuds && Container.Resolve<PluginUtils>().IsFpsCounterEnabledInCountersPlus)
 			{
 				Logger.Log.Info($"Binding {nameof(FPSCounter)}");
 				var fpsCounter = new GameObject(Plugin.PluginName).AddComponent<Behaviours.FpsCounter>();

@@ -1,61 +1,47 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using CountersPlus.Custom;
 using IPA.Loader;
+using Zenject;
 
 namespace FPS_Counter.Utilities
 {
-	internal static class PluginUtils
+	internal class PluginUtils : IInitializable, IDisposable
 	{
-		private static bool _isCountersPlusPresent;
+		internal bool IsCountersPlusPresent { get; private set; }
 
-		internal static bool IsCountersPlusPresent
-		{
-			get => _isCountersPlusPresent;
-			private set
-			{
-				if (value.Equals(_isCountersPlusPresent))
-				{
-					return;
-				}
+		internal bool IsFpsCounterEnabledInCountersPlus => !IsCountersPlusPresent || IsEnabledInCountersPlus();
 
-				_isCountersPlusPresent = value;
-				CountersPlusStateChanged?.Invoke(typeof(PluginUtils), IsCountersPlusPresent);
-			}
-		}
-
-		internal static bool IsFpsCounterEnabledInCountersPlus => IsCountersPlusPresent && IsEnabledInCountersPlus();
-
-		internal static event EventHandler<bool>? CountersPlusStateChanged;
-
-		internal static void Setup()
+		public void Initialize()
 		{
 			RegisterPluginChangeListeners();
 
 			IsCountersPlusPresent = PluginManager.EnabledPlugins.Any(x => x.Id == "Counters+");
+			if (IsCountersPlusPresent)
+			{
+				CountersPlusUtils.AddCustomCounter();
+			}
 		}
 
-		internal static void Cleanup()
+		public void Dispose()
 		{
 			UnregisterPluginChangeListeners();
 
 			IsCountersPlusPresent = false;
 		}
 
-		private static void RegisterPluginChangeListeners()
+		private void RegisterPluginChangeListeners()
 		{
 			PluginManager.PluginEnabled += OnPluginEnabled;
 			PluginManager.PluginDisabled += OnPluginDisabled;
 		}
 
-		private static void UnregisterPluginChangeListeners()
+		private void UnregisterPluginChangeListeners()
 		{
 			PluginManager.PluginEnabled -= OnPluginEnabled;
 			PluginManager.PluginDisabled -= OnPluginDisabled;
 		}
 
-		private static void OnPluginEnabled(PluginMetadata plugin, bool needsRestart)
+		private void OnPluginEnabled(PluginMetadata plugin, bool needsRestart)
 		{
 			if (needsRestart)
 			{
@@ -66,11 +52,12 @@ namespace FPS_Counter.Utilities
 			{
 				case "Counters+":
 					IsCountersPlusPresent = true;
+					CountersPlusUtils.AddCustomCounter();
 					return;
 			}
 		}
 
-		private static void OnPluginDisabled(PluginMetadata plugin, bool needsRestart)
+		private void OnPluginDisabled(PluginMetadata plugin, bool needsRestart)
 		{
 			if (needsRestart)
 			{
@@ -81,10 +68,11 @@ namespace FPS_Counter.Utilities
 			{
 				case "Counters+":
 					IsCountersPlusPresent = false;
+					CountersPlusUtils.RemoveCustomCounter();
 					return;
 			}
 		}
-		
-		private static bool IsEnabledInCountersPlus() => CountersPlus.Config.ConfigLoader.LoadCustomCounters().FirstOrDefault(x => x.DisplayName == Constants.CountersPlusSectionName).Enabled;
+
+		private bool IsEnabledInCountersPlus() => CountersPlus.Config.ConfigLoader.LoadCustomCounters().FirstOrDefault(x => x.DisplayName == Constants.CountersPlusSectionName).Enabled;
 	}
 }
