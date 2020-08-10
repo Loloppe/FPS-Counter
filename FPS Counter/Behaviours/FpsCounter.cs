@@ -41,9 +41,12 @@ namespace FPS_Counter.Behaviours
 			try
 			{
 				Logger.Log.Info("Attempting to Initialize FPS Counter");
-				_targetFramerate = (int) XRDevice.refreshRate;
 
+				_targetFramerate = (int) XRDevice.refreshRate;
 				Logger.Log.Info($"Target framerate = {_targetFramerate}");
+
+				Logger.Log.Info("Hiding FPS Counter");
+				gameObject.transform.localScale = Vector3.zero;
 
 				Canvas canvas = gameObject.AddComponent<Canvas>();
 				canvas.renderMode = RenderMode.WorldSpace;
@@ -65,7 +68,16 @@ namespace FPS_Counter.Behaviours
 				_counter.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1f);
 				_counter.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1f);
 				_counter.enableWordWrapping = false;
-				_counter.transform.localPosition = _pluginUtils?.IsCountersPlusPresent ?? false ? Vector3.zero : new Vector3(-0.1f, 3.5f, 8f);
+
+				if (_pluginUtils?.IsCountersPlusPresent ?? false)
+				{
+					_counter.transform.localPosition = Vector3.zero;
+				}
+				else
+				{
+					_counter.transform.localPosition = new Vector3(-0.1f, 3.5f, 8f);
+					gameObject.transform.localScale = Vector3.one;
+				}
 
 				if (!Configuration.Instance.ShowRing)
 				{
