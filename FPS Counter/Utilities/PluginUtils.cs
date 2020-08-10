@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using CountersPlus.Custom;
 using IPA.Loader;
 
 namespace FPS_Counter.Utilities
@@ -22,6 +24,8 @@ namespace FPS_Counter.Utilities
 				CountersPlusStateChanged?.Invoke(typeof(PluginUtils), IsCountersPlusPresent);
 			}
 		}
+
+		internal static bool IsFpsCounterEnabledInCountersPlus => IsCountersPlusPresent && IsEnabledInCountersPlus();
 
 		internal static event EventHandler<bool>? CountersPlusStateChanged;
 
@@ -80,5 +84,7 @@ namespace FPS_Counter.Utilities
 					return;
 			}
 		}
+		
+		private static bool IsEnabledInCountersPlus() => CountersPlus.Config.ConfigLoader.LoadCustomCounters().FirstOrDefault(x => x.DisplayName == Constants.CountersPlusSectionName).Enabled;
 	}
 }
