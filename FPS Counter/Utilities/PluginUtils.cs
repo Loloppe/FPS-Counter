@@ -9,7 +9,7 @@ namespace FPS_Counter.Utilities
 	{
 		internal bool IsCountersPlusPresent { get; private set; }
 
-		internal bool IsFpsCounterEnabledInCountersPlus => !IsCountersPlusPresent || IsEnabledInCountersPlus();
+		internal bool IsFpsCounterEnabledInCountersPlus => !IsCountersPlusPresent || CountersPlusUtils.IsEnabledInCountersPlus();
 
 		public void Initialize()
 		{
@@ -74,7 +74,5 @@ namespace FPS_Counter.Utilities
 					return;
 			}
 		}
-
-		private bool IsEnabledInCountersPlus() => CountersPlus.Config.ConfigLoader.LoadCustomCounters().FirstOrDefault(x => x.DisplayName == Constants.CountersPlusSectionName).Enabled;
 	}
 }

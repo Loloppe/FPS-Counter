@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using CountersPlus.Custom;
 
 namespace FPS_Counter.Utilities
 {
 	internal static class CountersPlusUtils
 	{
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		internal static bool IsEnabledInCountersPlus() => CountersPlus.Config.ConfigLoader.LoadCustomCounters().FirstOrDefault(x => x.DisplayName == Constants.CountersPlusSectionName).Enabled;
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		internal static void AddCustomCounter()
 		{
 			Logger.Log.Info("Creating Custom Counter");
@@ -23,6 +29,7 @@ namespace FPS_Counter.Utilities
 			CustomCounterCreator.Create(counter);
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		internal static void RemoveCustomCounter()
 		{
 			Logger.Log.Info("Removing Custom Counter");
