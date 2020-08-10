@@ -6,7 +6,7 @@
   "id": "FPSCounter",
   "icon": "FPS_Counter.Resources.icon.png",
   "name": "FPS Counter",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "features": [
     "print",
     "debug",
