@@ -16,13 +16,13 @@ namespace FPS_Counter.Installers
 			
 			if (!Container.Resolve<GameplayCoreSceneSetupData>().playerSpecificSettings.noTextsAndHuds && Container.Resolve<PluginUtils>().IsFpsCounterEnabledInCountersPlus)
 			{
-				Logger.Log.Info($"Binding {nameof(FPSCounter)}");
+				Logger.Log.Debug($"Binding {nameof(FPSCounter)}");
 				var fpsCounter = new GameObject(Plugin.PluginName).AddComponent<Behaviours.FpsCounter>();
 				Container.InjectSpecialInstance<Behaviours.FpsCounter>(fpsCounter);
 			}
 			else
 			{
-				Logger.Log.Info($"No Text and HUD enabled in PlayerSettings - Not constructing FpsCounter");
+				Logger.Log.Debug($"No Text and HUD enabled in PlayerSettings - Not constructing FpsCounter");
 			}
 		}
 	}

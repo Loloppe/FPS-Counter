@@ -34,8 +34,6 @@ namespace FPS_Counter
 		[OnEnable]
 		public void OnEnable()
 		{
-			Logger.Log.Info("Checking for Counters+");
-
 			BSMLSettings.instance.AddSettingsMenu(PluginName, "FPS_Counter.Settings.UI.Views.mainsettings.bsml", _settingsHost ??= new SettingsController());
 
 			SiraUtil.Zenject.Installer.RegisterAppInstaller<AppInstaller>();

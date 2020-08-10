@@ -15,9 +15,11 @@ namespace FPS_Counter.Utilities
 		{
 			RegisterPluginChangeListeners();
 
+			Logger.Log.Info("Checking for Counters+");
 			IsCountersPlusPresent = PluginManager.EnabledPlugins.Any(x => x.Id == "Counters+");
 			if (IsCountersPlusPresent)
 			{
+				Logger.Log.Info("Found Counters+");
 				CountersPlusUtils.AddCustomCounter();
 			}
 		}

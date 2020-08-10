@@ -92,29 +92,21 @@ namespace FPS_Counter.Behaviours
 				_percent.transform.localScale = new Vector3(4f, 4f, 4f);
 				_percent.transform.localPosition = Vector3.zero;
 
-				try
-				{
-					ScoreMultiplierUIController scoreMultiplier = Resources.FindObjectsOfTypeAll<ScoreMultiplierUIController>().First();
-					var multiplierImage = BS_Utils.Utilities.ReflectionUtil.GetPrivateField<Image>(scoreMultiplier, "_multiplierProgressImage");
+				ScoreMultiplierUIController scoreMultiplier = Resources.FindObjectsOfTypeAll<ScoreMultiplierUIController>().First();
+				var multiplierImage = BS_Utils.Utilities.ReflectionUtil.GetPrivateField<Image>(scoreMultiplier, "_multiplierProgressImage");
 
-					if (scoreMultiplier && _image)
-					{
-						_image.sprite = multiplierImage.sprite;
-						_image.type = Image.Type.Filled;
-						_image.fillMethod = Image.FillMethod.Radial360;
-						_image.fillOrigin = (int) Image.Origin360.Top;
-						_image.fillClockwise = true;
-					}
-				}
-				catch (Exception ex)
+				if (scoreMultiplier && _image)
 				{
-					Logger.Log.Error("oops");
-					Logger.Log.Error(ex);
+					_image.sprite = multiplierImage.sprite;
+					_image.type = Image.Type.Filled;
+					_image.fillMethod = Image.FillMethod.Radial360;
+					_image.fillOrigin = (int) Image.Origin360.Top;
+					_image.fillClockwise = true;
 				}
 			}
 			catch (Exception ex)
 			{
-				Logger.Log.Error("FPS Counter Done screwed up on initialization"); // -Kyle1413
+				Logger.Log.Error("FPS Counter Done");
 				Logger.Log.Error(ex);
 			}
 		}
