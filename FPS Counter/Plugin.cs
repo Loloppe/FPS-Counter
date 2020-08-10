@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using BeatSaberMarkupLanguage.Settings;
 using CountersPlus.Custom;
+using FPS_Counter.Installers;
 using FPS_Counter.Settings;
 using FPS_Counter.Settings.UI;
 using FPS_Counter.Utilities;
@@ -10,7 +12,6 @@ using IPA;
 using IPA.Config;
 using IPA.Config.Stores;
 using IPA.Loader;
-using UnityEngine;
 using IPALogger = IPA.Logging.Logger;
 
 namespace FPS_Counter
@@ -43,18 +44,18 @@ namespace FPS_Counter
 			PluginUtils.CountersPlusStateChanged += OnCountersPlusStateChanged;
 			PluginUtils.Setup();
 
-			BS_Utils.Utilities.BSEvents.gameSceneLoaded += OnGameSceneLoaded;
-
 			BSMLSettings.instance.AddSettingsMenu(PluginName, "FPS_Counter.Settings.UI.Views.mainsettings.bsml", _settingsHost ??= new SettingsController());
+
+			SiraUtil.Zenject.Installer.RegisterGameplayCoreInstaller<GamePlayCoreInstaller>();
 		}
 
 		[OnDisable]
 		public void OnDisable()
 		{
+			SiraUtil.Zenject.Installer.UnregisterGameplayCoreInstaller<GamePlayCoreInstaller>();
+
 			PluginUtils.CountersPlusStateChanged -= OnCountersPlusStateChanged;
 			PluginUtils.Cleanup();
-
-			BS_Utils.Utilities.BSEvents.gameSceneLoaded -= OnGameSceneLoaded;
 
 			RemoveCustomCounter();
 
@@ -75,18 +76,13 @@ namespace FPS_Counter
 			}
 		}
 
-		private static void OnGameSceneLoaded()
-		{
-			new GameObject(PluginName).AddComponent<Behaviours.FpsCounter>();
-		}
-
 		private static void AddCustomCounter()
 		{
 			Logger.Log.Info("Creating Custom Counter");
 
 			CustomCounter counter = new CustomCounter
 			{
-				SectionName = "fpsCounter",
+				SectionName = Constants.CountersPlusSectionName,
 				Name = PluginName,
 				BSIPAMod = _metadata,
 				Counter = PluginName,

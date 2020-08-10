@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR;
+using Zenject;
 
 namespace FPS_Counter.Behaviours
 {
@@ -27,78 +28,73 @@ namespace FPS_Counter.Behaviours
 		private int _frameCount;
 		private float _accumulatedTime;
 
-		private void Awake()
+		private void Start()
 		{
 			try
 			{
-				Logger.Log.Debug("Attempting to Initialize FPS Counter");
-				Init();
-			}
-			catch (Exception ex)
-			{
-				Logger.Log.Error("FPS Counter Done screwed up on initialization"); // -Kyle1413
-				Logger.Log.Error(ex);
-			}
-		}
+				Logger.Log.Info("Attempting to Initialize FPS Counter");
+				_targetFramerate = (int) XRDevice.refreshRate;
 
-		private void Init()
-		{
-			_targetFramerate = (int) XRDevice.refreshRate;
+				Logger.Log.Info($"Target framerate = {_targetFramerate}");
 
-			Logger.Log.Info($"Target framerate = {_targetFramerate}");
+				Canvas canvas = gameObject.AddComponent<Canvas>();
+				canvas.renderMode = RenderMode.WorldSpace;
 
-			Canvas canvas = gameObject.AddComponent<Canvas>();
-			canvas.renderMode = RenderMode.WorldSpace;
+				CanvasScaler canvasScaler = gameObject.AddComponent<CanvasScaler>();
+				canvasScaler.scaleFactor = 10.0f;
+				canvasScaler.dynamicPixelsPerUnit = 10f;
 
-			CanvasScaler canvasScaler = gameObject.AddComponent<CanvasScaler>();
-			canvasScaler.scaleFactor = 10.0f;
-			canvasScaler.dynamicPixelsPerUnit = 10f;
+				gameObject.AddComponent<GraphicRaycaster>();
+				gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1f);
+				gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1f);
 
-			gameObject.AddComponent<GraphicRaycaster>();
-			gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1f);
-			gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1f);
+				TextHelper.CreateText(out _counter, canvas, Vector2.zero);
+				_counter.alignment = TextAlignmentOptions.Center;
+				_counter.transform.localScale *= PluginUtils.IsCountersPlusPresent ? 1 : 0.12f;
+				_counter.fontSize = 2.5f;
+				_counter.color = Color.white;
+				_counter.lineSpacing = -50f;
+				_counter.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1f);
+				_counter.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1f);
+				_counter.enableWordWrapping = false;
+				_counter.transform.localPosition = PluginUtils.IsCountersPlusPresent ? Vector3.zero : new Vector3(-0.1f, 3.5f, 8f);
 
-			TextHelper.CreateText(out _counter, canvas, Vector2.zero);
-			_counter.alignment = TextAlignmentOptions.Center;
-			_counter.transform.localScale *= PluginUtils.IsCountersPlusPresent ? 1 : 0.12f;
-			_counter.fontSize = 2.5f;
-			_counter.color = Color.white;
-			_counter.lineSpacing = -50f;
-			_counter.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1f);
-			_counter.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1f);
-			_counter.enableWordWrapping = false;
-			_counter.transform.localPosition = PluginUtils.IsCountersPlusPresent ? Vector3.zero : new Vector3(-0.1f, 3.5f, 8f);
-
-			if (!Configuration.Instance.ShowRing)
-			{
-				return;
-			}
-
-			_percent = new GameObject();
-			_image = _percent.AddComponent<Image>();
-			_percent.transform.SetParent(_counter.transform, false);
-			_percent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 2f);
-			_percent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 2f);
-			_percent.transform.localScale = new Vector3(4f, 4f, 4f);
-			_percent.transform.localPosition = Vector3.zero;
-
-			try
-			{
-				ScoreMultiplierUIController scoreMultiplier = Resources.FindObjectsOfTypeAll<ScoreMultiplierUIController>().First();
-				var multiplierImage = BS_Utils.Utilities.ReflectionUtil.GetPrivateField<Image>(scoreMultiplier, "_multiplierProgressImage");
-
-				if (scoreMultiplier && _image)
+				if (!Configuration.Instance.ShowRing)
 				{
-					_image.sprite = multiplierImage.sprite;
-					_image.type = Image.Type.Filled;
-					_image.fillMethod = Image.FillMethod.Radial360;
-					_image.fillOrigin = (int) Image.Origin360.Top;
-					_image.fillClockwise = true;
+					return;
+				}
+
+				_percent = new GameObject();
+				_image = _percent.AddComponent<Image>();
+				_percent.transform.SetParent(_counter.transform, false);
+				_percent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 2f);
+				_percent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 2f);
+				_percent.transform.localScale = new Vector3(4f, 4f, 4f);
+				_percent.transform.localPosition = Vector3.zero;
+
+				try
+				{
+					ScoreMultiplierUIController scoreMultiplier = Resources.FindObjectsOfTypeAll<ScoreMultiplierUIController>().First();
+					var multiplierImage = BS_Utils.Utilities.ReflectionUtil.GetPrivateField<Image>(scoreMultiplier, "_multiplierProgressImage");
+
+					if (scoreMultiplier && _image)
+					{
+						_image.sprite = multiplierImage.sprite;
+						_image.type = Image.Type.Filled;
+						_image.fillMethod = Image.FillMethod.Radial360;
+						_image.fillOrigin = (int) Image.Origin360.Top;
+						_image.fillClockwise = true;
+					}
+				}
+				catch (Exception ex)
+				{
+					Logger.Log.Error("oops");
+					Logger.Log.Error(ex);
 				}
 			}
 			catch (Exception ex)
 			{
-				Logger.Log.Error("oops");
+				Logger.Log.Error("FPS Counter Done screwed up on initialization"); // -Kyle1413
 				Logger.Log.Error(ex);
 			}
 		}
@@ -139,6 +135,11 @@ namespace FPS_Counter.Behaviours
 			_timeLeft = Configuration.Instance.UpdateRate;
 			_accumulatedTime = 0.0f;
 			_frameCount = 0;
+		}
+
+		private void OnDestroy()
+		{
+			Logger.Log.Info("FPS Counter got yeeted");
 		}
 
 		private static Color DetermineColor(float fpsTargetPercentage)

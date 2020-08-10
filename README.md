@@ -7,6 +7,7 @@ Below, you can find the few mods that this mods requires. You'll also find the v
 
  - BS Utils v1.4.9 or higher
  - BeatSaberMarkupLanguage v1.3.2 or higher
+ - SiraUtil v0.1.1 or higher
  - Counters+ v1.9.1 (Optional)
 
 The installation itself is fairly simple.
