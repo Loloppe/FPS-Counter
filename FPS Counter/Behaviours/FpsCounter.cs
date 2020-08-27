@@ -93,7 +93,7 @@ namespace FPS_Counter.Behaviours
 				_percent.transform.localPosition = Vector3.zero;
 
 				ScoreMultiplierUIController scoreMultiplier = Resources.FindObjectsOfTypeAll<ScoreMultiplierUIController>().First();
-				var multiplierImage = BS_Utils.Utilities.ReflectionUtil.GetPrivateField<Image>(scoreMultiplier, "_multiplierProgressImage");
+				var multiplierImage = IPA.Utilities.ReflectionUtil.GetField<Image, ScoreMultiplierUIController>(scoreMultiplier, "_multiplierProgressImage");
 
 				if (scoreMultiplier && _image)
 				{
