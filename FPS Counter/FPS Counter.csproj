@@ -106,7 +106,10 @@
     <EmbeddedResource Include="Settings\UI\Views\mainsettings.bsml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetPath)" "$(BeatSaberDir)\Plugins"</PostBuildEvent>
-  </PropertyGroup>
+  <Target Name="CopyToPlugins" AfterTargets="AfterBuild">
+    <Message Text="Copying $(OutDir)FPSCounter.dll to Plugins folder" Importance="high" />
+    <Copy SourceFiles="$(OutDir)FPSCounter.dll" DestinationFiles="$(GameDirPath)Plugins\FPSCounter.dll" />
+    <Message Text="Copying $(OutDir)FPSCounter.pdb to Plugins folder" Importance="high" />
+    <Copy SourceFiles="$(OutDir)FPSCounter.pdb" DestinationFiles="$(GameDirPath)Plugins\FPSCounter.pdb" />
+  </Target>
 </Project>
