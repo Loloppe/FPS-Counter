@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using CountersPlus.Custom;
+using IPA.Utilities;
 
 namespace FPS_Counter.Utilities
 {
@@ -11,7 +11,7 @@ namespace FPS_Counter.Utilities
 	{
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		internal static bool IsEnabledInCountersPlus() =>
-			CountersPlus.Config.ConfigLoader.LoadCustomCounters()?.FirstOrDefault(x => x.DisplayName == Constants.CountersPlusSectionName)?.Enabled ?? false;
+			CountersPlus.Config.ConfigLoader.LoadCustomCounters().FirstOrDefault(x => x.DisplayName == Constants.CountersPlusSectionName)?.Enabled ?? false;
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		internal static void AddCustomCounter()
@@ -44,7 +44,7 @@ namespace FPS_Counter.Utilities
 			try
 			{
 				var loadedCustomCounters = LoadedCustomCounters();
-				loadedCustomCounters?.RemoveAll(cc => cc.Name == Plugin.PluginName);
+				loadedCustomCounters.RemoveAll(cc => cc.Name == Plugin.PluginName);
 			}
 			catch (Exception ex)
 			{
@@ -54,7 +54,6 @@ namespace FPS_Counter.Utilities
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static List<CustomCounter>? LoadedCustomCounters() =>
-			typeof(CustomCounterCreator).GetField("LoadedCustomCounters", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null) as List<CustomCounter>;
+		private static List<CustomCounter> LoadedCustomCounters() => FieldAccessor<CustomCounterCreator, List<CustomCounter>>.Get(null!, "LoadedCustomCounters");
 	}
 }
