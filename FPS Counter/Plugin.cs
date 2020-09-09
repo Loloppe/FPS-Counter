@@ -3,7 +3,6 @@ using BeatSaberMarkupLanguage.Settings;
 using FPS_Counter.Installers;
 using FPS_Counter.Settings;
 using FPS_Counter.Settings.UI;
-using FPS_Counter.Utilities;
 using IPA;
 using IPA.Config;
 using IPA.Config.Stores;
@@ -43,8 +42,6 @@ namespace FPS_Counter
 		[OnDisable]
 		public void OnDisable()
 		{
-			CountersPlusUtils.RemoveCustomCounter();
-			
 			SiraUtil.Zenject.Installer.UnregisterGameplayCoreInstaller<GamePlayCoreInstaller>();
 			SiraUtil.Zenject.Installer.UnregisterAppInstaller<AppInstaller>();
 
