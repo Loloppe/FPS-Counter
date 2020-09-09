@@ -111,8 +111,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="CopyToPlugins" AfterTargets="AfterBuild">
     <Message Text="Copying $(OutDir)FPSCounter.dll to Plugins folder" Importance="high" />
-    <Copy SourceFiles="$(OutDir)FPSCounter.dll" DestinationFiles="$(GameDirPath)Plugins\FPSCounter.dll" />
+    <Copy SourceFiles="$(OutDir)FPSCounter.dll" DestinationFiles="$(BeatSaberDir)Plugins\FPSCounter.dll" />
     <Message Text="Copying $(OutDir)FPSCounter.pdb to Plugins folder" Importance="high" />
-    <Copy SourceFiles="$(OutDir)FPSCounter.pdb" DestinationFiles="$(GameDirPath)Plugins\FPSCounter.pdb" />
+    <Copy SourceFiles="$(OutDir)FPSCounter.pdb" DestinationFiles="$(BeatSaberDir)Plugins\FPSCounter.pdb" />
   </Target>
 </Project>
