@@ -6,7 +6,7 @@ A Beat Saber mod to show your fps in-game.
 Below, you can find the few mods that this mods requires. You'll also find the versions that I used to test.
 
  - BeatSaberMarkupLanguage v1.3.4 or higher
- - SiraUtil v0.2.0 or higher
+ - SiraUtil v1.0.2 or higher
  - Counters+ v1.9.1 (Optional)  
    Because version 2.0.0 of Counters+ is still in development, FPS Counter currently can't integrate with that version and above for now. However, it's still possible to use both simultaneously. 
 

@@ -5,15 +5,11 @@ using Zenject;
 
 namespace FPS_Counter.Installers
 {
+	[RequiresInstaller(typeof(AppInstaller))]
 	public class GamePlayCoreInstaller : MonoInstaller
 	{
 		public override void InstallBindings()
 		{
-			if (!AppInstaller.FirstBindingInstalled)
-			{
-				return;
-			}
-			
 			if (!Container.Resolve<GameplayCoreSceneSetupData>().playerSpecificSettings.noTextsAndHuds && Container.Resolve<PluginUtils>().IsFpsCounterEnabledInCountersPlus)
 			{
 				Logger.Log.Debug($"Binding {nameof(FPSCounter)}");
