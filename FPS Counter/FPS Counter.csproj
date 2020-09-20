@@ -84,15 +84,15 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="manifest.json"/>
-        <EmbeddedResource Include="Resources\icon.png"/>
-        <EmbeddedResource Include="Settings\UI\Views\mainsettings.bsml"/>
+        <EmbeddedResource Include="manifest.json" />
+        <EmbeddedResource Include="Resources\Icon.png" />
+        <EmbeddedResource Include="Settings\UI\Views\*.bsml" />
     </ItemGroup>
 
     <Target Name="CopyToPlugins" AfterTargets="AfterBuild">
-        <Message Text="Copying $(OutDir)FPSCounter.dll to Plugins folder" Importance="high"/>
-        <Copy SourceFiles="$(OutDir)FPSCounter.dll" DestinationFiles="$(BeatSaberDir)Plugins\FPSCounter.dll"/>
-        <Message Text="Copying $(OutDir)FPSCounter.pdb to Plugins folder" Importance="high"/>
-        <Copy SourceFiles="$(OutDir)FPSCounter.pdb" DestinationFiles="$(BeatSaberDir)Plugins\FPSCounter.pdb"/>
+        <Message Text="Copying $(OutDir)FPSCounter.dll to Plugins folder" Importance="high" />
+        <Copy SourceFiles="$(OutDir)FPSCounter.dll" DestinationFiles="$(BeatSaberDir)Plugins\FPSCounter.dll" />
+        <Message Text="Copying $(OutDir)FPSCounter.pdb to Plugins folder" Importance="high" />
+        <Copy SourceFiles="$(OutDir)FPSCounter.pdb" DestinationFiles="$(BeatSaberDir)Plugins\FPSCounter.pdb" />
     </Target>
 </Project>

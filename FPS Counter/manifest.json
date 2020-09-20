@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/nike4613/ModSaber-MetadataFileSchema/master/Schema.json",
   "id": "FPSCounter",
   "name": "FPS Counter",
-  "icon": "FPS_Counter.Resources.icon.png",
+  "icon": "FPS_Counter.Resources.Icon.png",
   "description": "A Beat Saber mod to show your fps in-game.",
   "author": "Eris",
   "gameVersion": "1.11.0",
