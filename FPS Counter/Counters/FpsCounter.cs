@@ -1,14 +1,14 @@
-﻿using FPS_Counter.Settings;
-using FPS_Counter.Utilities;
-using System;
+﻿using System;
 using BeatSaberMarkupLanguage;
+using FPS_Counter.Settings;
+using FPS_Counter.Utilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR;
 using Zenject;
 
-namespace FPS_Counter.Behaviours
+namespace FPS_Counter.Counters
 {
 	internal class FpsCounter : IInitializable, ITickable, IDisposable
 	{

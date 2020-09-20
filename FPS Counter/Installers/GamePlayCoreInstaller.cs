@@ -1,4 +1,5 @@
-﻿using FPS_Counter.Utilities;
+﻿using FPS_Counter.Counters;
+using FPS_Counter.Utilities;
 using SiraUtil.Zenject;
 using Zenject;
 
@@ -13,7 +14,7 @@ namespace FPS_Counter.Installers
 			{
 				Logger.Log.Debug($"Binding {nameof(FPSCounter)}");
 
-				Container.BindInterfacesAndSelfTo<Behaviours.FpsCounter>().AsSingle().NonLazy();
+				Container.BindInterfacesAndSelfTo<FpsCounter>().AsSingle().NonLazy();
 
 				Logger.Log.Debug($"Finished binding {nameof(FPSCounter)}");
 			}

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 using UnityEngine.XR;
 using Zenject;
 
-namespace FPS_Counter.Behaviours
+namespace FPS_Counter.Counters
 {
 	public class FpsCounterCountersPlus : BasicCustomCounter, ITickable
 	{
