@@ -1,32 +1,32 @@
 ﻿{
-  "$schema": "https://raw.githubusercontent.com/nike4613/ModSaber-MetadataFileSchema/master/Schema.json",
-  "id": "FPSCounter",
-  "name": "FPS Counter",
-  "icon": "FPS_Counter.Resources.Icon.png",
-  "description": "A Beat Saber mod to show your fps in-game.",
-  "author": "Eris",
-  "gameVersion": "1.11.0",
-  "version": "2.2.6",
-  "dependsOn": {
-    "BSIPA": "^4.0.0",
-    "SiraUtil": "^1.0.2",
-    "BeatSaberMarkupLanguage": "^1.3.4"
-  },
-  "loadAfter": [
-    "Counters+"
-  ],
-  "features": {
-    "CountersPlus.CustomCounter": {
-      "Name": "FPS Counter",
-      "CounterLocation": "FPS_Counter.Behaviours.FpsCounterCountersPlus",
-      "BSML": {
-        "Resource": "FPS_Counter.Settings.UI.Views.mainSettingsCountersPlus.bsml",
-        "Host": "FPS_Counter.Settings.UI.SettingsController",
-        "Icon": "FPS_Counter.Resources.Icon.png"
-      }
-    }
-  },
-  "links": {
-    "project-home": "https://github.com/ErisApps/FPS-Counter"
-  }
+	"$schema": "https://raw.githubusercontent.com/nike4613/ModSaber-MetadataFileSchema/master/Schema.json",
+	"id": "FPSCounter",
+	"name": "FPS Counter",
+	"icon": "FPS_Counter.Resources.Icon.png",
+	"description": "A Beat Saber mod to show your fps in-game.",
+	"author": "Eris",
+	"gameVersion": "1.11.0",
+	"version": "2.2.6",
+	"dependsOn": {
+		"BSIPA": "^4.0.0",
+		"SiraUtil": "^1.0.2",
+		"BeatSaberMarkupLanguage": "^1.3.4"
+	},
+	"loadAfter": [
+		"Counters+"
+	],
+	"features": {
+		"CountersPlus.CustomCounter": {
+			"Name": "FPS Counter",
+			"CounterLocation": "FPS_Counter.Behaviours.FpsCounterCountersPlus",
+			"BSML": {
+				"Resource": "FPS_Counter.Settings.UI.Views.mainSettingsCountersPlus.bsml",
+				"Host": "FPS_Counter.Settings.UI.SettingsController",
+				"Icon": "FPS_Counter.Resources.Icon.png"
+			}
+		}
+	},
+	"links": {
+		"project-home": "https://github.com/ErisApps/FPS-Counter"
+	}
 }
