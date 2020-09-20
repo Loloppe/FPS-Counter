@@ -1,0 +1,9 @@
+﻿<vertical xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+		  xsi:noNamespaceSchemaLocation='https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+
+	<increment-setting text='FPS Update rate' value='update-rate'
+					   min='0.1' increment='0.1' apply-on-change='true'/>
+	<bool-setting text='Use FPS Colors' value='use-colors' apply-on-change='true'/>
+	<bool-setting text='Show FPS ring' value='show-ring' apply-on-change='true'/>
+
+</vertical>

@@ -1,7 +1,7 @@
 ﻿using FPS_Counter.Settings;
 using FPS_Counter.Utilities;
 using System;
-using System.Linq;
+using BeatSaberMarkupLanguage;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,19 +10,10 @@ using Zenject;
 
 namespace FPS_Counter.Behaviours
 {
-	internal class FpsCounter : MonoBehaviour
+	internal class FpsCounter : IInitializable, ITickable, IDisposable
 	{
-		// Allocate beforehand, because invoking a color "constant" will create a new struct every time
-		private static readonly Color Green = Color.green;
-		private static readonly Color Yellow = Color.yellow;
-		private static readonly Color Orange = new Color(1, 0.64f, 0);
-		private static readonly Color Red = Color.red;
-
-		private PluginUtils? _pluginUtils;
-
 		private int _targetFramerate;
 		private TMP_Text? _counter;
-		private GameObject? _percent;
 		private float _ringFillPercent = 1;
 		private Image? _image;
 
@@ -30,13 +21,7 @@ namespace FPS_Counter.Behaviours
 		private int _frameCount;
 		private float _accumulatedTime;
 
-		[Inject]
-		protected void Construct(PluginUtils pluginUtils)
-		{
-			_pluginUtils = pluginUtils;
-		}
-
-		private void Start()
+		public void Initialize()
 		{
 			try
 			{
@@ -45,64 +30,35 @@ namespace FPS_Counter.Behaviours
 				_targetFramerate = (int) XRDevice.refreshRate;
 				Logger.Log.Info($"Target framerate = {_targetFramerate}");
 
-				Logger.Log.Info("Hiding FPS Counter");
-				gameObject.transform.localScale = Vector3.zero;
+				var gameObject = new GameObject("FPS Counter");
 
-				Canvas canvas = gameObject.AddComponent<Canvas>();
+				var canvas = gameObject.AddComponent<Canvas>();
 				canvas.renderMode = RenderMode.WorldSpace;
+				gameObject.transform.localScale = Vector3.one / 10;
+				gameObject.transform.position = new Vector3(-0.1f, 3.5f, 8f);
+				gameObject.transform.rotation = Quaternion.identity;
 
-				CanvasScaler canvasScaler = gameObject.AddComponent<CanvasScaler>();
-				canvasScaler.scaleFactor = 10.0f;
-				canvasScaler.dynamicPixelsPerUnit = 10f;
+				var canvasTransform = canvas.transform as RectTransform;
 
-				gameObject.AddComponent<GraphicRaycaster>();
-				gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1f);
-				gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1f);
-
-				TextHelper.CreateText(out _counter, canvas, Vector2.zero);
+				_counter = BeatSaberUI.CreateText(canvasTransform, string.Empty, Vector3.zero);
 				_counter.alignment = TextAlignmentOptions.Center;
-				_counter.transform.localScale *= _pluginUtils?.IsCountersPlusPresent ?? false ? 1 : 0.12f;
 				_counter.fontSize = 2.5f;
 				_counter.color = Color.white;
 				_counter.lineSpacing = -50f;
-				_counter.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1f);
-				_counter.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1f);
+				_counter.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 2f);
+				_counter.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 2f);
 				_counter.enableWordWrapping = false;
-
-				if (_pluginUtils?.IsCountersPlusPresent ?? false)
-				{
-					_counter.transform.localPosition = Vector3.zero;
-				}
-				else
-				{
-					_counter.transform.localPosition = new Vector3(-0.1f, 3.5f, 8f);
-					gameObject.transform.localScale = Vector3.one;
-				}
+				_counter.overflowMode = TextOverflowModes.Overflow;
 
 				if (!Configuration.Instance.ShowRing)
 				{
 					return;
 				}
 
-				_percent = new GameObject();
-				_image = _percent.AddComponent<Image>();
-				_percent.transform.SetParent(_counter.transform, false);
-				_percent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 2f);
-				_percent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 2f);
-				_percent.transform.localScale = new Vector3(4f, 4f, 4f);
-				_percent.transform.localPosition = Vector3.zero;
-
-				ScoreMultiplierUIController scoreMultiplier = Resources.FindObjectsOfTypeAll<ScoreMultiplierUIController>().First();
-				var multiplierImage = IPA.Utilities.ReflectionUtil.GetField<Image, ScoreMultiplierUIController>(scoreMultiplier, "_multiplierProgressImage");
-
-				if (scoreMultiplier && _image)
-				{
-					_image.sprite = multiplierImage.sprite;
-					_image.type = Image.Type.Filled;
-					_image.fillMethod = Image.FillMethod.Radial360;
-					_image.fillOrigin = (int) Image.Origin360.Top;
-					_image.fillClockwise = true;
-				}
+				_image = FpsCounterUtils.CreateRing(canvas);
+				var imageTransform = _image.rectTransform;
+				imageTransform.anchoredPosition = _counter.rectTransform.anchoredPosition;
+				imageTransform.localScale *= 0.1f;
 			}
 			catch (Exception ex)
 			{
@@ -111,67 +67,14 @@ namespace FPS_Counter.Behaviours
 			}
 		}
 
-		private void Update()
+		public void Tick()
 		{
-			var localDeltaTime = Time.deltaTime;
-			_accumulatedTime += Time.timeScale / localDeltaTime;
-			_timeLeft -= localDeltaTime;
-			++_frameCount;
-
-			if (Configuration.Instance.ShowRing && _image)
-			{
-				// Animate the ring Fps indicator to it's final value with every update invocation 
-				_image!.fillAmount = Mathf.Lerp(_image.fillAmount, _ringFillPercent, 2 * localDeltaTime);
-			}
-
-			if (_timeLeft > 0.0)
-			{
-				// The time to update hasn't come yet.
-				return;
-			}
-
-			var fps = Mathf.Round(_accumulatedTime / _frameCount);
-			_counter!.text = $"FPS\n{fps}";
-			_ringFillPercent = fps / _targetFramerate;
-
-			if (Configuration.Instance.UseColors)
-			{
-				var color = DetermineColor(_ringFillPercent);
-				_counter.color = color;
-				if (_image)
-				{
-					_image!.color = color;
-				}
-			}
-
-			_timeLeft = Configuration.Instance.UpdateRate;
-			_accumulatedTime = 0.0f;
-			_frameCount = 0;
+			FpsCounterUtils.SharedTicker(ref _accumulatedTime, ref _timeLeft, ref _frameCount, ref _targetFramerate, ref _ringFillPercent, _image, _counter);
 		}
 
-		private void OnDestroy()
+		public void Dispose()
 		{
 			Logger.Log.Info("FPS Counter got yeeted");
-		}
-
-		private static Color DetermineColor(float fpsTargetPercentage)
-		{
-			if (fpsTargetPercentage > 0.95f)
-			{
-				return Green;
-			}
-
-			if (fpsTargetPercentage > 0.7f)
-			{
-				return Yellow;
-			}
-
-			if (fpsTargetPercentage > 0.5f)
-			{
-				return Orange;
-			}
-
-			return Red;
 		}
 	}
 }

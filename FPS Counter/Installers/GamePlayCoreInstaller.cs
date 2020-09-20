@@ -1,6 +1,5 @@
 ﻿using FPS_Counter.Utilities;
 using SiraUtil.Zenject;
-using UnityEngine;
 using Zenject;
 
 namespace FPS_Counter.Installers
@@ -10,15 +9,17 @@ namespace FPS_Counter.Installers
 	{
 		public override void InstallBindings()
 		{
-			if (!Container.Resolve<GameplayCoreSceneSetupData>().playerSpecificSettings.noTextsAndHuds && Container.Resolve<PluginUtils>().IsFpsCounterEnabledInCountersPlus)
+			if (!Container.Resolve<GameplayCoreSceneSetupData>().playerSpecificSettings.noTextsAndHuds && !Container.Resolve<PluginUtils>().IsCountersPlusPresent)
 			{
 				Logger.Log.Debug($"Binding {nameof(FPSCounter)}");
-				var fpsCounter = new GameObject(Plugin.PluginName).AddComponent<Behaviours.FpsCounter>();
-				Container.InjectSpecialInstance<Behaviours.FpsCounter>(fpsCounter);
+
+				Container.BindInterfacesAndSelfTo<Behaviours.FpsCounter>().AsSingle().NonLazy();
+
+				Logger.Log.Debug($"Finished binding {nameof(FPSCounter)}");
 			}
 			else
 			{
-				Logger.Log.Debug($"No Text and HUD enabled in PlayerSettings - Not constructing FpsCounter");
+				Logger.Log.Debug($"Either Counters+ is present or No Text and HUD enabled in PlayerSettings - Not constructing FpsCounter");
 			}
 		}
 	}

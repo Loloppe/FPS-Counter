@@ -9,8 +9,6 @@ namespace FPS_Counter.Utilities
 	{
 		internal bool IsCountersPlusPresent { get; private set; }
 
-		internal bool IsFpsCounterEnabledInCountersPlus => !IsCountersPlusPresent || CountersPlusUtils.IsEnabledInCountersPlus();
-
 		public void Initialize()
 		{
 			RegisterPluginChangeListeners();
@@ -22,7 +20,7 @@ namespace FPS_Counter.Utilities
 				return;
 			}
 
-			if (pluginMetaData.Version.Major >= 2)
+			if (pluginMetaData.Version.Major < 2)
 			{
 				Logger.Log.Warn($"Version {pluginMetaData.Version} of Counters+ has been found, but is deemed incompatible with FPS Counter. NOT INTEGRATING");
 				return;
@@ -30,7 +28,6 @@ namespace FPS_Counter.Utilities
 
 			IsCountersPlusPresent = true;
 			Logger.Log.Info("Found Counters+");
-			CountersPlusUtils.AddCustomCounter();
 		}
 
 		public void Dispose()
@@ -63,7 +60,6 @@ namespace FPS_Counter.Utilities
 			{
 				case "Counters+" when plugin.Version.Major < 2:
 					IsCountersPlusPresent = true;
-					CountersPlusUtils.AddCustomCounter();
 					return;
 			}
 		}
@@ -77,9 +73,8 @@ namespace FPS_Counter.Utilities
 
 			switch (plugin.Id)
 			{
-				case "Counters+" when plugin.Version.Major < 2:
+				case "Counters+" when plugin.Version.Major >= 2:
 					IsCountersPlusPresent = false;
-					CountersPlusUtils.RemoveCustomCounter();
 					return;
 			}
 		}

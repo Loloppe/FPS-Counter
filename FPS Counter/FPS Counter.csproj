@@ -6,6 +6,8 @@
         <LangVersion>8</LangVersion>
         <Nullable>enable</Nullable>
         <OutDir>$(ProjectDir)bin\$(Configuration)</OutDir>
+        <RootNamespace>FPS_Counter</RootNamespace>
+        <AssemblyName>FPSCounter</AssemblyName>
         <ModVersion>2.2.6</ModVersion>
         <AssemblyVersion>$(ModVersion)</AssemblyVersion>
         <FileVersion>$(ModVersion)</FileVersion>
@@ -77,7 +79,7 @@
             <HintPath>$(BeatSaberDir)\Plugins\SiraUtil.dll</HintPath>
             <Private>false</Private>
         </Reference>
-        <Reference Include="CountersPlus">
+        <Reference Include="Counters+">
             <HintPath>$(BeatSaberDir)\Plugins\Counters+.dll</HintPath>
             <Private>false</Private>
         </Reference>

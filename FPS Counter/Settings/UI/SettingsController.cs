@@ -4,25 +4,32 @@ namespace FPS_Counter.Settings.UI
 {
 	internal class SettingsController
 	{
+		private readonly Configuration _configuration;
+
+		public SettingsController(Configuration configuration)
+		{
+			_configuration = configuration;
+		}
+
 		[UIValue("update-rate")]
 		public float FpsUpdateRate
 		{
-			get => Configuration.Instance.UpdateRate;
-			set => Configuration.Instance.UpdateRate = value;
+			get => _configuration.UpdateRate;
+			set => _configuration.UpdateRate = value;
 		}
 
 		[UIValue("show-ring")]
 		public bool ShowFpsRing
 		{
-			get => Configuration.Instance.ShowRing;
-			set => Configuration.Instance.ShowRing = value;
+			get => _configuration.ShowRing;
+			set => _configuration.ShowRing = value;
 		}
 
 		[UIValue("use-colors")]
 		public bool FpsUseColors
 		{
-			get => Configuration.Instance.UseColors;
-			set => Configuration.Instance.UseColors = value;
+			get => _configuration.UseColors;
+			set => _configuration.UseColors = value;
 		}
 	}
 }

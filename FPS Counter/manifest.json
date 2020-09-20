@@ -15,6 +15,17 @@
   "loadAfter": [
     "Counters+"
   ],
+  "features": {
+    "CountersPlus.CustomCounter": {
+      "Name": "FPS Counter",
+      "CounterLocation": "FPS_Counter.Behaviours.FpsCounterCountersPlus",
+      "BSML": {
+        "Resource": "FPS_Counter.Settings.UI.Views.mainSettingsCountersPlus.bsml",
+        "Host": "FPS_Counter.Settings.UI.SettingsController",
+        "Icon": "FPS_Counter.Resources.Icon.png"
+      }
+    }
+  },
   "links": {
     "project-home": "https://github.com/ErisApps/FPS-Counter"
   }
