@@ -36,7 +36,7 @@ namespace FPS_Counter.Utilities
 			timeLeft -= localDeltaTime;
 			++frameCount;
 
-			if (Configuration.Instance.ShowRing && percentageRing)
+			if (Configuration.Instance!.ShowRing && percentageRing)
 			{
 				// Animate the ring Fps indicator to it's final value with every update invocation
 				percentageRing!.fillAmount = Mathf.Lerp(percentageRing.fillAmount, ringFillPercent, 2 * localDeltaTime);

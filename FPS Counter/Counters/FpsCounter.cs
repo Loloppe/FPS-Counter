@@ -50,7 +50,7 @@ namespace FPS_Counter.Counters
 				_counter.enableWordWrapping = false;
 				_counter.overflowMode = TextOverflowModes.Overflow;
 
-				if (!Configuration.Instance.ShowRing)
+				if (!Configuration.Instance!.ShowRing)
 				{
 					return;
 				}

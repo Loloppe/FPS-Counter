@@ -37,7 +37,7 @@ namespace FPS_Counter.Counters
 				_counterText.fontSize = 2.5f;
 				_counterText.lineSpacing = -50f;
 
-				if (!Configuration.Instance.ShowRing)
+				if (!Configuration.Instance!.ShowRing)
 				{
 					return;
 				}
