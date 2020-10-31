@@ -8,7 +8,7 @@
         <OutDir>$(ProjectDir)bin\$(Configuration)</OutDir>
         <RootNamespace>FPS_Counter</RootNamespace>
         <AssemblyName>FPSCounter</AssemblyName>
-        <ModVersion>3.0.1</ModVersion>
+        <ModVersion>3.0.2</ModVersion>
         <AssemblyVersion>$(ModVersion)</AssemblyVersion>
         <FileVersion>$(ModVersion)</FileVersion>
         <InformationalVersion>$(ModVersion)</InformationalVersion>
