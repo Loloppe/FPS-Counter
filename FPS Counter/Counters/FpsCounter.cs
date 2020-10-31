@@ -2,6 +2,7 @@
 using BeatSaberMarkupLanguage;
 using FPS_Counter.Settings;
 using FPS_Counter.Utilities;
+using HMUI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,6 +38,7 @@ namespace FPS_Counter.Counters
 				gameObject.transform.localScale = Vector3.one / 10;
 				gameObject.transform.position = new Vector3(-0.1f, 3.5f, 8f);
 				gameObject.transform.rotation = Quaternion.identity;
+				gameObject.AddComponent<CurvedCanvasSettings>().SetRadius(0f);
 
 				var canvasTransform = canvas.transform as RectTransform;
 
