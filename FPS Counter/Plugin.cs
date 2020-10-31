@@ -2,6 +2,7 @@
 using FPS_Counter.Installers;
 using IPA;
 using IPA.Loader;
+using SiraUtil.Zenject;
 using IPALogger = IPA.Logging.Logger;
 
 namespace FPS_Counter
@@ -15,24 +16,25 @@ namespace FPS_Counter
 		internal static string PluginName => _name ??= _metadata?.Name ?? Assembly.GetExecutingAssembly().GetName().Name;
 
 		[Init]
-		public void Init(IPALogger logger, PluginMetadata metaData)
+		public void Init(IPALogger logger, PluginMetadata metaData, Zenjector zenject)
 		{
 			_metadata = metaData;
 			Logger.Log = logger;
+
+			zenject.OnApp<AppInstaller>();
+			zenject.OnGame<GamePlayCoreInstaller>();
 		}
 
 		[OnEnable]
 		public void OnEnable()
 		{
-			SiraUtil.Zenject.Installer.RegisterAppInstaller<AppInstaller>();
-			SiraUtil.Zenject.Installer.RegisterGameplayCoreInstaller<GamePlayCoreInstaller>();
+			// SiraUtil handles this for me, but just adding an empty body method to prevent warnings in the logs ^^
 		}
 
 		[OnDisable]
 		public void OnDisable()
 		{
-			SiraUtil.Zenject.Installer.UnregisterGameplayCoreInstaller<GamePlayCoreInstaller>();
-			SiraUtil.Zenject.Installer.UnregisterAppInstaller<AppInstaller>();
+			// SiraUtil handles this for me, but just adding an empty body method to prevent warnings in the logs ^^
 		}
 	}
 }

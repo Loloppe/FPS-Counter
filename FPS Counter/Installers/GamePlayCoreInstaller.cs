@@ -1,16 +1,21 @@
 ﻿using FPS_Counter.Counters;
 using FPS_Counter.Utilities;
-using SiraUtil.Zenject;
 using Zenject;
 
 namespace FPS_Counter.Installers
 {
-	[RequiresInstaller(typeof(AppInstaller))]
-	public class GamePlayCoreInstaller : MonoInstaller
+	public class GamePlayCoreInstaller : Installer<GamePlayCoreInstaller>
 	{
+		private readonly GameplayCoreSceneSetupData? _gameplayCoreSceneSetupData;
+
+		public GamePlayCoreInstaller([InjectOptional] GameplayCoreSceneSetupData gameplayCoreSceneSetupData)
+		{
+			_gameplayCoreSceneSetupData = gameplayCoreSceneSetupData;
+		}
+
 		public override void InstallBindings()
 		{
-			if (!Container.Resolve<GameplayCoreSceneSetupData>().playerSpecificSettings.noTextsAndHuds && !Container.Resolve<PluginUtils>().IsCountersPlusPresent)
+			if ((!_gameplayCoreSceneSetupData?.playerSpecificSettings.noTextsAndHuds ?? false) && !Container.Resolve<PluginUtils>().IsCountersPlusPresent)
 			{
 				Logger.Log.Debug($"Binding {nameof(FPSCounter)}");
 
