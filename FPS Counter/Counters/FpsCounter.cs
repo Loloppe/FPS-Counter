@@ -5,7 +5,6 @@ using FPS_Counter.Utilities;
 using HMUI;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.XR;
 using Zenject;
 
@@ -16,7 +15,7 @@ namespace FPS_Counter.Counters
 		private int _targetFramerate;
 		private TMP_Text? _counter;
 		private float _ringFillPercent = 1;
-		private Image? _image;
+		private ImageView? _image;
 
 		private float _timeLeft;
 		private int _frameCount;

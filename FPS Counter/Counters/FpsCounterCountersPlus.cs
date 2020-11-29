@@ -2,9 +2,9 @@
 using CountersPlus.Counters.Custom;
 using FPS_Counter.Settings;
 using FPS_Counter.Utilities;
+using HMUI;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.XR;
 using Zenject;
 
@@ -17,7 +17,7 @@ namespace FPS_Counter.Counters
 		private int _targetFramerate;
 		private TMP_Text? _counterText;
 		private float _ringFillPercent = 1;
-		private Image? _image;
+		private ImageView? _ringImage;
 
 		private float _timeLeft;
 		private int _frameCount;
@@ -48,9 +48,9 @@ namespace FPS_Counter.Counters
 					return;
 				}
 
-				_image = FpsCounterUtils.CreateRing(canvas);
-				_image.rectTransform.anchoredPosition = _counterText.rectTransform.anchoredPosition;
-				_image.transform.localScale = _ringSize / 10;
+				_ringImage = FpsCounterUtils.CreateRing(canvas);
+				_ringImage.rectTransform.anchoredPosition = _counterText.rectTransform.anchoredPosition;
+				_ringImage.transform.localScale = _ringSize / 10;
 			}
 			catch (Exception ex)
 			{
@@ -61,7 +61,7 @@ namespace FPS_Counter.Counters
 
 		public void Tick()
 		{
-			FpsCounterUtils.SharedTicker(ref _accumulatedTime, ref _timeLeft, ref _frameCount, ref _targetFramerate, ref _ringFillPercent, _image, _counterText);
+			FpsCounterUtils.SharedTicker(ref _accumulatedTime, ref _timeLeft, ref _frameCount, ref _targetFramerate, ref _ringFillPercent, _ringImage, _counterText);
 		}
 
 		public override void CounterDestroy()
