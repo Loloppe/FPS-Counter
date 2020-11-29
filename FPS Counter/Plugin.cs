@@ -25,14 +25,8 @@ namespace FPS_Counter
 			zenject.OnGame<GamePlayCoreInstaller>();
 		}
 
-		[OnEnable]
-		public void OnEnable()
-		{
-			// SiraUtil handles this for me, but just adding an empty body method to prevent warnings in the logs ^^
-		}
-
-		[OnDisable]
-		public void OnDisable()
+		[OnEnable, OnDisable]
+		public void OnStateChanged()
 		{
 			// SiraUtil handles this for me, but just adding an empty body method to prevent warnings in the logs ^^
 		}

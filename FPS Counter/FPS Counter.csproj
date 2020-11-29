@@ -2,7 +2,7 @@
     <PropertyGroup>
         <TargetFramework>net472</TargetFramework>
         <OutputType>Library</OutputType>
-        <LangVersion>8</LangVersion>
+        <LangVersion>9</LangVersion>
         <Nullable>enable</Nullable>
 		<LocalRefsDir Condition="Exists('..\Refs')">..\Refs</LocalRefsDir>
 		<BeatSaberDir>$(LocalRefsDir)</BeatSaberDir>
