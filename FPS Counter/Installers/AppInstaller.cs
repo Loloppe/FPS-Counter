@@ -21,10 +21,10 @@ namespace FPS_Counter.Installers
 			Container.BindInterfacesAndSelfTo<PluginUtils>().AsSingle().NonLazy();
 
 			Logger.Log.Debug($"Binding {nameof(SettingsController)}");
-			Container.BindInterfacesAndSelfTo<SettingsController>().AsSingle().NonLazy();
+			Container.BindInterfacesAndSelfTo<SettingsController>().AsSingle();
 
 			Logger.Log.Debug($"Binding {nameof(SettingsControllerManager)}");
-			Container.BindInterfacesAndSelfTo<SettingsControllerManager>().AsSingle().NonLazy();
+			Container.BindInterfacesAndSelfTo<SettingsControllerManager>().AsSingle();
 
 			Container.BindInitializableExecutionOrder<PluginUtils>(0);
 			Container.BindInitializableExecutionOrder<SettingsControllerManager>(1);
