@@ -22,6 +22,7 @@ namespace FPS_Counter
 			Logger.Log = logger;
 
 			zenject.OnApp<AppInstaller>();
+			zenject.OnMenu<Installers.MenuInstaller>();
 			zenject.OnGame<GamePlayCoreInstaller>();
 		}
 
