@@ -1,5 +1,5 @@
 ﻿{
-	"$schema": "https://raw.githubusercontent.com/nike4613/ModSaber-MetadataFileSchema/master/Schema.json",
+	"$schema": "https://raw.githubusercontent.com/beat-saber-modding-group/BSIPA-MetadataFileSchema/master/Schema.json",
 	"id": "FPSCounter",
 	"name": "FPS Counter",
 	"icon": "FPS_Counter.Resources.Icon.png",
