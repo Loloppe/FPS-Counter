@@ -3,6 +3,7 @@ using BeatSaberMarkupLanguage;
 using FPS_Counter.Settings;
 using FPS_Counter.Utilities;
 using HMUI;
+using SiraUtil.Tools;
 using TMPro;
 using UnityEngine;
 using UnityEngine.XR;
@@ -12,6 +13,8 @@ namespace FPS_Counter.Counters
 {
 	internal class FpsCounter : IInitializable, ITickable, IDisposable
 	{
+		private readonly SiraLog _logger;
+
 		private int _targetFramerate;
 		private TMP_Text? _counter;
 		private float _ringFillPercent = 1;
@@ -21,14 +24,19 @@ namespace FPS_Counter.Counters
 		private int _frameCount;
 		private float _accumulatedTime;
 
+		public FpsCounter(SiraLog logger)
+		{
+			_logger = logger;
+		}
+
 		public void Initialize()
 		{
 			try
 			{
-				Logger.Log.Info("Attempting to Initialize FPS Counter");
+				_logger.Debug("Attempting to Initialize FPS Counter");
 
 				_targetFramerate = (int) XRDevice.refreshRate;
-				Logger.Log.Info($"Target framerate = {_targetFramerate}");
+				_logger.Debug($"Target framerate = {_targetFramerate}");
 
 				var gameObject = new GameObject("FPS Counter");
 
@@ -63,8 +71,8 @@ namespace FPS_Counter.Counters
 			}
 			catch (Exception ex)
 			{
-				Logger.Log.Error("FPS Counter Done");
-				Logger.Log.Error(ex);
+				_logger.Error("FPS Counter Done");
+				_logger.Error(ex);
 			}
 		}
 
@@ -75,7 +83,7 @@ namespace FPS_Counter.Counters
 
 		public void Dispose()
 		{
-			Logger.Log.Info("FPS Counter got yeeted");
+			_logger.Debug("FPS Counter got yeeted");
 		}
 	}
 }

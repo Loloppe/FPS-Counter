@@ -2,24 +2,34 @@
 using FPS_Counter.Utilities;
 using IPA.Config;
 using IPA.Config.Stores;
+using IPA.Logging;
+using SiraUtil;
 using Zenject;
 
 namespace FPS_Counter.Installers
 {
-	public class AppInstaller : MonoInstaller
+	public class AppInstaller : Installer<Logger, AppInstaller>
 	{
+		private readonly Logger _logger;
+
+		public AppInstaller(Logger logger)
+		{
+			_logger = logger;
+		}
+
 		public override void InstallBindings()
 		{
-			Logger.Log.Debug($"Running {nameof(InstallBindings)} of {nameof(AppInstaller)}");
+			_logger.Debug($"Running {nameof(InstallBindings)} of {nameof(AppInstaller)}");
+			Container.BindLoggerAsSiraLogger(_logger);
 
-			Logger.Log.Debug($"Binding {nameof(Configuration)}");
+			_logger.Debug($"Binding {nameof(Configuration)}");
 			Configuration.Instance ??= Config.GetConfigFor(Plugin.PluginName).Generated<Configuration>();
 			Container.BindInstance(Configuration.Instance).AsSingle().NonLazy();
 
-			Logger.Log.Debug($"Binding {nameof(PluginUtils)}");
+			_logger.Debug($"Binding {nameof(PluginUtils)}");
 			Container.BindInterfacesAndSelfTo<PluginUtils>().AsSingle().NonLazy();
 
-			Logger.Log.Debug($"All bindings installed in {nameof(AppInstaller)}");
+			_logger.Debug($"All bindings installed in {nameof(AppInstaller)}");
 		}
 	}
 }

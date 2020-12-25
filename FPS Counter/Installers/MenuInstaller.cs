@@ -1,10 +1,19 @@
 ﻿using FPS_Counter.Settings.UI;
+using FPS_Counter.Utilities;
+using SiraUtil.Tools;
 using Zenject;
 
 namespace FPS_Counter.Installers
 {
 	public class MenuInstaller : Installer<MenuInstaller>
 	{
+		private readonly SiraLog _logger;
+
+		public MenuInstaller(SiraLog logger)
+		{
+			_logger = logger;
+		}
+
 		public override void InstallBindings()
 		{
 			if (!Container.Resolve<PluginUtils>().IsCountersPlusPresent)

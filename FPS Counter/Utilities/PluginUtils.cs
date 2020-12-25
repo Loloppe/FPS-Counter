@@ -1,19 +1,26 @@
 ﻿using System;
 using System.Linq;
 using IPA.Loader;
+using SiraUtil.Tools;
 using Zenject;
 
 namespace FPS_Counter.Utilities
 {
 	internal class PluginUtils : IInitializable, IDisposable
 	{
+		private readonly SiraLog _logger;
 		internal bool IsCountersPlusPresent { get; private set; }
+
+		public PluginUtils(SiraLog logger)
+		{
+			_logger = logger;
+		}
 
 		public void Initialize()
 		{
 			RegisterPluginChangeListeners();
 
-			Logger.Log.Info("Checking for Counters+");
+			_logger.Info("Checking for Counters+");
 			var pluginMetaData = PluginManager.EnabledPlugins.FirstOrDefault(x => x.Id == "Counters+");
 			if (pluginMetaData == null)
 			{
@@ -22,12 +29,12 @@ namespace FPS_Counter.Utilities
 
 			if (pluginMetaData.Version.Major < 2)
 			{
-				Logger.Log.Warn($"Version {pluginMetaData.Version} of Counters+ has been found, but is deemed incompatible with FPS Counter. NOT INTEGRATING");
+				_logger.Warning($"Version {pluginMetaData.Version} of Counters+ has been found, but is deemed incompatible with FPS Counter. NOT INTEGRATING!");
 				return;
 			}
 
 			IsCountersPlusPresent = true;
-			Logger.Log.Info("Found Counters+");
+			_logger.Info("Found Counters+");
 		}
 
 		public void Dispose()

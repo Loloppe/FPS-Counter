@@ -3,6 +3,7 @@ using CountersPlus.Counters.Custom;
 using FPS_Counter.Settings;
 using FPS_Counter.Utilities;
 using HMUI;
+using SiraUtil.Tools;
 using TMPro;
 using UnityEngine;
 using UnityEngine.XR;
@@ -12,6 +13,7 @@ namespace FPS_Counter.Counters
 {
 	public class FpsCounterCountersPlus : BasicCustomCounter, ITickable
 	{
+		private readonly SiraLog _logger;
 		private readonly Vector3 _ringSize = Vector3.one;
 
 		private int _targetFramerate;
@@ -23,14 +25,19 @@ namespace FPS_Counter.Counters
 		private int _frameCount;
 		private float _accumulatedTime;
 
+		public FpsCounterCountersPlus(SiraLog logger)
+		{
+			_logger = logger;
+		}
+
 		public override void CounterInit()
 		{
 			try
 			{
-				Logger.Log.Info("Attempting to Initialize FPS Counter");
+				_logger.Debug("Attempting to Initialize FPS Counter");
 
 				_targetFramerate = (int) XRDevice.refreshRate;
-				Logger.Log.Info($"Target framerate = {_targetFramerate}");
+				_logger.Debug($"Target framerate = {_targetFramerate}");
 
 				_counterText = CanvasUtility.CreateTextFromSettings(Settings);
 				_counterText.color = Color.white;
@@ -54,8 +61,8 @@ namespace FPS_Counter.Counters
 			}
 			catch (Exception ex)
 			{
-				Logger.Log.Error("FPS Counter Done");
-				Logger.Log.Error(ex);
+				_logger.Error("FPS Counter Done");
+				_logger.Error(ex);
 			}
 		}
 
@@ -66,7 +73,7 @@ namespace FPS_Counter.Counters
 
 		public override void CounterDestroy()
 		{
-			Logger.Log.Info("FPS Counter got yeeted");
+			_logger.Debug("FPS Counter got yeeted");
 		}
 	}
 }

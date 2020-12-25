@@ -19,9 +19,8 @@ namespace FPS_Counter
 		public void Init(IPALogger logger, PluginMetadata metaData, Zenjector zenject)
 		{
 			_metadata = metaData;
-			Logger.Log = logger;
 
-			zenject.OnApp<AppInstaller>();
+			zenject.OnApp<AppInstaller>().WithParameters(logger);
 			zenject.OnMenu<Installers.MenuInstaller>();
 			zenject.OnGame<GamePlayCoreInstaller>();
 		}

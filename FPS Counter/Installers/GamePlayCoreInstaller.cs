@@ -1,15 +1,18 @@
 ﻿using FPS_Counter.Counters;
 using FPS_Counter.Utilities;
+using SiraUtil.Tools;
 using Zenject;
 
 namespace FPS_Counter.Installers
 {
 	public class GamePlayCoreInstaller : Installer<GamePlayCoreInstaller>
 	{
+		private readonly SiraLog _logger;
 		private readonly GameplayCoreSceneSetupData? _gameplayCoreSceneSetupData;
 
-		public GamePlayCoreInstaller([InjectOptional] GameplayCoreSceneSetupData gameplayCoreSceneSetupData)
+		public GamePlayCoreInstaller(SiraLog logger, [InjectOptional] GameplayCoreSceneSetupData gameplayCoreSceneSetupData)
 		{
+			_logger = logger;
 			_gameplayCoreSceneSetupData = gameplayCoreSceneSetupData;
 		}
 
@@ -17,15 +20,15 @@ namespace FPS_Counter.Installers
 		{
 			if ((!_gameplayCoreSceneSetupData?.playerSpecificSettings.noTextsAndHuds ?? false) && !Container.Resolve<PluginUtils>().IsCountersPlusPresent)
 			{
-				Logger.Log.Debug($"Binding {nameof(FPSCounter)}");
+				_logger.Debug($"Binding {nameof(FPSCounter)}");
 
 				Container.BindInterfacesAndSelfTo<FpsCounter>().AsSingle().NonLazy();
 
-				Logger.Log.Debug($"Finished binding {nameof(FPSCounter)}");
+				_logger.Debug($"Finished binding {nameof(FPSCounter)}");
 			}
 			else
 			{
-				Logger.Log.Debug($"Either Counters+ is present or No Text and HUD enabled in PlayerSettings - Not constructing FpsCounter");
+				_logger.Debug($"Either Counters+ is present or No Text and HUD enabled in PlayerSettings - Not constructing FpsCounter");
 			}
 		}
 	}
