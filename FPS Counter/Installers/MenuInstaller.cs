@@ -7,11 +7,14 @@ namespace FPS_Counter.Installers
 	{
 		public override void InstallBindings()
 		{
-			Logger.Log.Debug($"Binding {nameof(SettingsController)}");
-			Container.BindInterfacesAndSelfTo<SettingsController>().AsSingle();
+			if (!Container.Resolve<PluginUtils>().IsCountersPlusPresent)
+			{
+				_logger.Debug($"Binding {nameof(SettingsController)}");
+				Container.BindInterfacesAndSelfTo<SettingsController>().AsSingle();
 
-			Logger.Log.Debug($"Binding {nameof(SettingsControllerManager)}");
-			Container.BindInterfacesAndSelfTo<SettingsControllerManager>().AsSingle();
+				_logger.Debug($"Binding {nameof(SettingsControllerManager)}");
+				Container.BindInterfacesAndSelfTo<SettingsControllerManager>().AsSingle();
+			}
 		}
 	}
 }
