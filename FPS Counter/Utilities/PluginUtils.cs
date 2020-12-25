@@ -8,6 +8,8 @@ namespace FPS_Counter.Utilities
 {
 	internal class PluginUtils : IInitializable, IDisposable
 	{
+		private const string COUNTERS_PLUS_MOD_ID = "Counters+";
+
 		private readonly SiraLog _logger;
 		internal bool IsCountersPlusPresent { get; private set; }
 
@@ -21,7 +23,7 @@ namespace FPS_Counter.Utilities
 			RegisterPluginChangeListeners();
 
 			_logger.Info("Checking for Counters+");
-			var pluginMetaData = PluginManager.EnabledPlugins.FirstOrDefault(x => x.Id == "Counters+");
+			var pluginMetaData = PluginManager.EnabledPlugins.FirstOrDefault(x => x.Id == COUNTERS_PLUS_MOD_ID);
 			if (pluginMetaData == null)
 			{
 				return;
@@ -65,7 +67,7 @@ namespace FPS_Counter.Utilities
 
 			switch (plugin.Id)
 			{
-				case "Counters+" when plugin.Version.Major < 2:
+				case COUNTERS_PLUS_MOD_ID when plugin.Version.Major < 2:
 					IsCountersPlusPresent = true;
 					return;
 			}
@@ -80,7 +82,7 @@ namespace FPS_Counter.Utilities
 
 			switch (plugin.Id)
 			{
-				case "Counters+" when plugin.Version.Major >= 2:
+				case COUNTERS_PLUS_MOD_ID when plugin.Version.Major >= 2:
 					IsCountersPlusPresent = false;
 					return;
 			}
