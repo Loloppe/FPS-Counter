@@ -14,6 +14,8 @@ namespace FPS_Counter.Counters
 	internal class FpsCounter : IInitializable, ITickable, IDisposable
 	{
 		private readonly SiraLog _logger;
+		private readonly Configuration _config;
+		private readonly FpsCounterUtils _fpsCounterUtils;
 
 		private int _targetFramerate;
 		private TMP_Text? _counter;
@@ -24,9 +26,11 @@ namespace FPS_Counter.Counters
 		private int _frameCount;
 		private float _accumulatedTime;
 
-		public FpsCounter(SiraLog logger)
+		internal FpsCounter(SiraLog logger, Configuration config, FpsCounterUtils fpsCounterUtils)
 		{
 			_logger = logger;
+			_config = config;
+			_fpsCounterUtils = fpsCounterUtils;
 		}
 
 		public void Initialize()
@@ -59,12 +63,12 @@ namespace FPS_Counter.Counters
 				_counter.enableWordWrapping = false;
 				_counter.overflowMode = TextOverflowModes.Overflow;
 
-				if (!Configuration.Instance!.ShowRing)
+				if (!_config.ShowRing)
 				{
 					return;
 				}
 
-				_image = FpsCounterUtils.CreateRing(canvas);
+				_image = _fpsCounterUtils.CreateRing(canvas);
 				var imageTransform = _image.rectTransform;
 				imageTransform.anchoredPosition = _counter.rectTransform.anchoredPosition;
 				imageTransform.localScale *= 0.1f;
@@ -78,7 +82,7 @@ namespace FPS_Counter.Counters
 
 		public void Tick()
 		{
-			FpsCounterUtils.SharedTicker(ref _accumulatedTime, ref _timeLeft, ref _frameCount, ref _targetFramerate, ref _ringFillPercent, _image, _counter);
+			_fpsCounterUtils.SharedTicker(ref _accumulatedTime, ref _timeLeft, ref _frameCount, ref _targetFramerate, ref _ringFillPercent, _image, _counter);
 		}
 
 		public void Dispose()

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using FPS_Counter.Converters;
 using FPS_Counter.Settings;
 using HMUI;
@@ -8,20 +9,33 @@ using UnityEngine.UI;
 
 namespace FPS_Counter.Utilities
 {
-	internal static class FpsCounterUtils
+	internal class FpsCounterUtils : IDisposable
 	{
 		private const string NO_GLOW_MATERIAL_NAME = "UINoGlow";
 		private const string MULTIPLIER_IMAGE_SPRITE_NAME = "Circle";
+
+		private readonly Configuration _config;
+
 		private static Material? _noGlowMaterial;
 		private static Sprite? _multiplierImageSprite;
 
-		internal static Material NoGlowMaterial => _noGlowMaterial ??= new Material(Resources.FindObjectsOfTypeAll<Material>().Where(m => m.name == NO_GLOW_MATERIAL_NAME).First());
-		internal static Sprite MultiplierImageSprite => _multiplierImageSprite ??= Resources.FindObjectsOfTypeAll<Sprite>().Where(x => x.name == MULTIPLIER_IMAGE_SPRITE_NAME).First();
+		internal static Material NoGlowMaterial => _noGlowMaterial ??= new Material(Resources.FindObjectsOfTypeAll<Material>().First(m => m.name == NO_GLOW_MATERIAL_NAME));
+		internal static Sprite MultiplierImageSprite => _multiplierImageSprite ??= Resources.FindObjectsOfTypeAll<Sprite>().First(x => x.name == MULTIPLIER_IMAGE_SPRITE_NAME);
 
+		public FpsCounterUtils(Configuration config)
+		{
+			_config = config;
+		}
+
+		public void Dispose()
+		{
+			_noGlowMaterial = null;
+			_multiplierImageSprite = null;
+		}
 
 		// Pretty much yoinked from https://github.com/Caeden117/CountersPlus/blob/master/Counters%2B/Counters/ProgressCounter.cs#L93-L110
 		// Please don't smite me
-		internal static ImageView CreateRing(Canvas canvas)
+		internal ImageView CreateRing(Canvas canvas)
 		{
 			var ringGo = new GameObject("Ring Image", typeof(RectTransform));
 			ringGo.transform.SetParent(canvas.transform, false);
@@ -38,14 +52,14 @@ namespace FPS_Counter.Utilities
 			return ringImage;
 		}
 
-		internal static void SharedTicker(ref float accumulatedTime, ref float timeLeft, ref int frameCount, ref int targetFramerate, ref float ringFillPercent, Image? percentageRing, TMP_Text? text)
+		internal void SharedTicker(ref float accumulatedTime, ref float timeLeft, ref int frameCount, ref int targetFramerate, ref float ringFillPercent, Image? percentageRing, TMP_Text? text)
 		{
 			var localDeltaTime = Time.deltaTime;
 			accumulatedTime += Time.timeScale / localDeltaTime;
 			timeLeft -= localDeltaTime;
 			++frameCount;
 
-			if (Configuration.Instance!.ShowRing && percentageRing)
+			if (_config.ShowRing && percentageRing)
 			{
 				// Animate the ring Fps indicator to it's final value with every update invocation
 				percentageRing!.fillAmount = Mathf.Lerp(percentageRing.fillAmount, ringFillPercent, 2 * localDeltaTime);
@@ -61,7 +75,7 @@ namespace FPS_Counter.Utilities
 			text!.text = $"FPS\n{fps}";
 			ringFillPercent = fps / targetFramerate;
 
-			if (Configuration.Instance.UseColors)
+			if (_config.UseColors)
 			{
 				var color = FpsTargetPercentageColorValueConverter.Convert(ringFillPercent);
 				text.color = color;
@@ -71,7 +85,7 @@ namespace FPS_Counter.Utilities
 				}
 			}
 
-			timeLeft = Configuration.Instance.UpdateRate;
+			timeLeft = _config.UpdateRate;
 			accumulatedTime = 0.0f;
 			frameCount = 0;
 		}
