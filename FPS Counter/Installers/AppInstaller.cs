@@ -8,7 +8,7 @@ using Zenject;
 
 namespace FPS_Counter.Installers
 {
-	public class AppInstaller : Installer<Logger, AppInstaller>
+	internal class AppInstaller : Installer<Logger, Configuration, AppInstaller>
 	{
 		private readonly Logger _logger;
 

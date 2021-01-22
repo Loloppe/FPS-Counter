@@ -5,7 +5,7 @@ using Zenject;
 
 namespace FPS_Counter.Installers
 {
-	public class GamePlayCoreInstaller : Installer<GamePlayCoreInstaller>
+	internal class GamePlayCoreInstaller : Installer<GamePlayCoreInstaller>
 	{
 		private readonly SiraLog _logger;
 		private readonly GameplayCoreSceneSetupData? _gameplayCoreSceneSetupData;

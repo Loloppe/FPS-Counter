@@ -5,7 +5,7 @@ using Zenject;
 
 namespace FPS_Counter.Installers
 {
-	public class MenuInstaller : Installer<MenuInstaller>
+	internal class MenuInstaller : Installer<MenuInstaller>
 	{
 		private readonly SiraLog _logger;
 
