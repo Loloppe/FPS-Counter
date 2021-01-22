@@ -5,8 +5,8 @@
 	"icon": "FPS_Counter.Resources.Icon.png",
 	"description": "A Beat Saber mod to show your fps in-game.",
 	"author": "Eris",
-	"gameVersion": "1.13.0",
-	"version": "3.0.5",
+	"gameVersion": "1.13.2",
+	"version": "3.0.6",
 	"dependsOn": {
 		"BSIPA": "^4.1.4",
 		"SiraUtil": "^2.4.0",
