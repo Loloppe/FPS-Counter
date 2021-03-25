@@ -8,9 +8,9 @@
 	"gameVersion": "1.13.2",
 	"version": "3.0.6",
 	"dependsOn": {
-		"BSIPA": "^4.1.4",
-		"SiraUtil": "^2.4.0",
-		"BeatSaberMarkupLanguage": "^1.4.5"
+		"BSIPA": "^4.1.6",
+		"SiraUtil": "^2.5.2",
+		"BeatSaberMarkupLanguage": "^1.5.2"
 	},
 	"loadAfter": [
 		"Counters+"
