@@ -47,7 +47,7 @@ namespace FPS_Counter.Counters
 				var canvas = gameObject.AddComponent<Canvas>();
 				canvas.renderMode = RenderMode.WorldSpace;
 				gameObject.transform.localScale = Vector3.one / 10;
-				gameObject.transform.position = new Vector3(-0.1f, 3.5f, 8f);
+				gameObject.transform.position = new Vector3(0, 3.5f, 8f);
 				gameObject.transform.rotation = Quaternion.identity;
 				gameObject.AddComponent<CurvedCanvasSettings>().SetRadius(0f);
 
