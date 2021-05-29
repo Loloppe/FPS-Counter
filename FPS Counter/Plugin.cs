@@ -24,7 +24,7 @@ namespace FPS_Counter
 			_metadata = metaData;
 
 			zenject.OnApp<AppInstaller>().WithParameters(logger, config.Generated<Configuration>());
-			zenject.OnMenu<Installers.MenuInstaller>();
+			zenject.OnMenu<MenuInstaller>();
 			zenject.OnGame<GamePlayCoreInstaller>();
 		}
 
