@@ -29,9 +29,9 @@ namespace FPS_Counter.Utilities
 				return;
 			}
 
-			if (pluginMetaData.Version.Major < 2)
+			if (pluginMetaData.HVersion.Major < 2)
 			{
-				_logger.Warning($"Version {pluginMetaData.Version} of Counters+ has been found, but is deemed incompatible with FPS Counter. NOT INTEGRATING!");
+				_logger.Warning($"Version {pluginMetaData.HVersion} of Counters+ has been found, but is deemed incompatible with FPS Counter. NOT INTEGRATING!");
 				return;
 			}
 
@@ -67,7 +67,7 @@ namespace FPS_Counter.Utilities
 
 			switch (plugin.Id)
 			{
-				case COUNTERS_PLUS_MOD_ID when plugin.Version.Major < 2:
+				case COUNTERS_PLUS_MOD_ID when plugin.HVersion.Major < 2:
 					IsCountersPlusPresent = true;
 					return;
 			}
@@ -82,7 +82,7 @@ namespace FPS_Counter.Utilities
 
 			switch (plugin.Id)
 			{
-				case COUNTERS_PLUS_MOD_ID when plugin.Version.Major >= 2:
+				case COUNTERS_PLUS_MOD_ID when plugin.HVersion.Major >= 2:
 					IsCountersPlusPresent = false;
 					return;
 			}
