@@ -1,4 +1,4 @@
-﻿{
+{
 	"$schema": "https://raw.githubusercontent.com/beat-saber-modding-group/BSIPA-MetadataFileSchema/master/Schema.json",
 	"id": "FPSCounter",
 	"name": "FPS Counter",
@@ -8,9 +8,9 @@
 	"gameVersion": "1.16.1",
 	"version": "3.0.8",
 	"dependsOn": {
-		"BSIPA": "^4.1.6",
-		"SiraUtil": "^2.5.5",
-		"BeatSaberMarkupLanguage": "^1.5.3"
+		"BSIPA": "^4.2.0",
+		"SiraUtil": "^2.5.7",
+		"BeatSaberMarkupLanguage": "^1.5.4"
 	},
 	"loadAfter": [
 		"Counters+"
