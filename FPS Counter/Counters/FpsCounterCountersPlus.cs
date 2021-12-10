@@ -3,7 +3,7 @@ using CountersPlus.Counters.Custom;
 using FPS_Counter.Settings;
 using FPS_Counter.Utilities;
 using HMUI;
-using SiraUtil.Tools;
+using SiraUtil.Logging;
 using TMPro;
 using UnityEngine;
 using UnityEngine.XR;
@@ -41,7 +41,7 @@ namespace FPS_Counter.Counters
 			{
 				_logger.Debug("Attempting to Initialize FPS Counter");
 
-				_targetFramerate = (int) XRDevice.refreshRate;
+				_targetFramerate = (int) Math.Round(XRDevice.refreshRate);
 				_logger.Debug($"Target framerate = {_targetFramerate}");
 
 				_counterText = CanvasUtility.CreateTextFromSettings(Settings);

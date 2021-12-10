@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using IPA.Loader;
-using SiraUtil.Tools;
+using SiraUtil.Logging;
 using Zenject;
 
 namespace FPS_Counter.Utilities
@@ -31,7 +31,7 @@ namespace FPS_Counter.Utilities
 
 			if (pluginMetaData.HVersion.Major < 2)
 			{
-				_logger.Warning($"Version {pluginMetaData.HVersion} of Counters+ has been found, but is deemed incompatible with FPS Counter. NOT INTEGRATING!");
+				_logger.Warn($"Version {pluginMetaData.HVersion} of Counters+ has been found, but is deemed incompatible with FPS Counter. NOT INTEGRATING!");
 				return;
 			}
 

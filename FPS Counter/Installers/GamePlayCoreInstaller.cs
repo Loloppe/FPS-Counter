@@ -1,6 +1,6 @@
 ﻿using FPS_Counter.Counters;
 using FPS_Counter.Utilities;
-using SiraUtil.Tools;
+using SiraUtil.Logging;
 using Zenject;
 
 namespace FPS_Counter.Installers
@@ -28,7 +28,7 @@ namespace FPS_Counter.Installers
 			}
 			else
 			{
-				_logger.Debug($"Either Counters+ is present or No Text and HUD enabled in PlayerSettings - Not constructing FpsCounter");
+				_logger.Debug("Either Counters+ is present or No Text and HUD enabled in PlayerSettings - Not constructing FpsCounter");
 			}
 		}
 	}
