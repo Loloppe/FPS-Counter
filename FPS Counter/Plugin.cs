@@ -8,7 +8,7 @@ using SiraUtil.Zenject;
 
 namespace FPS_Counter
 {
-	[Plugin(RuntimeOptions.DynamicInit)]
+	[Plugin(RuntimeOptions.DynamicInit), NoEnableDisable]
 	public class Plugin
 	{
 		[Init]
@@ -20,12 +20,6 @@ namespace FPS_Counter
 			zenject.Install<AppInstaller>(Location.App, config.Generated<Configuration>());
 			zenject.Install<MenuInstaller>(Location.Menu);
 			zenject.Install<GamePlayCoreInstaller>(Location.Player);
-		}
-
-		[OnEnable, OnDisable]
-		public void OnStateChanged()
-		{
-			// SiraUtil handles this for me, but just adding an empty body method to prevent warnings in the logs ^^
 		}
 	}
 }
