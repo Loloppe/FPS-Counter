@@ -19,6 +19,7 @@
 		"CountersPlus.CustomCounter": {
 			"Name": "FPS Counter",
 			"CounterLocation": "FPS_Counter.Counters.FpsCounterCountersPlus",
+			"MultiplayerReady": true,
 			"BSML": {
 				"Resource": "FPS_Counter.Settings.UI.Views.mainSettingsCountersPlus.bsml",
 				"Host": "FPS_Counter.Settings.UI.SettingsController",
