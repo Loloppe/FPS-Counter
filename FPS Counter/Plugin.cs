@@ -12,7 +12,7 @@ namespace FPS_Counter
 	public class Plugin
 	{
 		[Init]
-		public void Init(Logger logger, Config config, Zenjector zenject)
+		public Plugin(Logger logger, Config config, Zenjector zenject)
 		{
 			zenject.UseLogger(logger);
 			zenject.UseMetadataBinder<Plugin>();
