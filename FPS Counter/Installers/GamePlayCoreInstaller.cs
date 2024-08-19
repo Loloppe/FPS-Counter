@@ -1,4 +1,4 @@
-﻿using FPS_Counter.Counters;
+using FPS_Counter.Counters;
 using FPS_Counter.Utilities;
 using SiraUtil.Logging;
 using Zenject;
@@ -20,11 +20,7 @@ namespace FPS_Counter.Installers
 		{
 			if ((!_gameplayCoreSceneSetupData?.playerSpecificSettings.noTextsAndHuds ?? false) && !Container.Resolve<PluginUtils>().IsCountersPlusPresent)
 			{
-				_logger.Debug($"Binding {nameof(FPSCounter)}");
-
 				Container.BindInterfacesAndSelfTo<FpsCounter>().AsSingle().NonLazy();
-
-				_logger.Debug($"Finished binding {nameof(FPSCounter)}");
 			}
 			else
 			{
