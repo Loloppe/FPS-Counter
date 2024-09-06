@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using FPS_Counter.Converters;
 using FPS_Counter.Settings;
