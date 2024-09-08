@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using BeatSaberMarkupLanguage.Settings;
 using FPS_Counter.Utilities;
 using IPA.Loader;
@@ -25,7 +25,7 @@ namespace FPS_Counter.Settings.UI
 		{
 			if (!_pluginUtils.IsCountersPlusPresent)
 			{
-				BSMLSettings.instance.AddSettingsMenu(_pluginMetadata.Name, "FPS_Counter.Settings.UI.Views.mainSettings.bsml", _settingsHost);
+				BSMLSettings.Instance.AddSettingsMenu(_pluginMetadata.Name, "FPS_Counter.Settings.UI.Views.mainSettings.bsml", _settingsHost);
 			}
 		}
 
@@ -36,7 +36,7 @@ namespace FPS_Counter.Settings.UI
 				return;
 			}
 
-			BSMLSettings.instance.RemoveSettingsMenu(_settingsHost);
+			BSMLSettings.Instance.RemoveSettingsMenu(_settingsHost);
 			_settingsHost = null!;
 		}
 	}
