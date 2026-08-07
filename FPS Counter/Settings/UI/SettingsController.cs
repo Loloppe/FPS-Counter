@@ -31,5 +31,24 @@ namespace FPS_Counter.Settings.UI
 			get => _configuration.UseColors;
 			set => _configuration.UseColors = value;
 		}
+		
+		[UIValue("pos-x")]
+		public float PosX
+		{
+			get => _configuration.PosX;
+			set => _configuration.PosX = value;
+		}
+		[UIValue("pos-y")]
+		public float PosY
+		{
+			get => _configuration.PosY;
+			set => _configuration.PosY = value;
+		}
+		[UIValue("pos-z")]
+		public float PosZ
+		{
+			get => _configuration.PosZ;
+			set => _configuration.PosZ = value;
+		}
 	}
 }
